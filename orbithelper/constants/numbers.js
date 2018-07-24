@@ -1,0 +1,2 @@
+export const UPDATE_INTERVAL_PLAYING = 250
+export const UPDATE_INTERVAL_PAUSED = 1000
