@@ -24,7 +24,7 @@
         :video-code="currentVideo.code"
         :player-vars="{rel: 0}"
         :comments="videoComments"
-        :commentNextPageBuffer="2"
+        :commentNextPageBuffer="10"
         :totalCommentCount="currentVideoTotalCommentCount"
         @commentDelete="handleCommentDelete"
         @commentEdit="handleCommentEdit"
