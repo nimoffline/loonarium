@@ -1,7 +1,7 @@
 <template>
 <div class="orbit-helper" :style="elementStyle">
   <youtube
-    :video-id="videoId"
+    :video-id="videoCode"
     :player-vars="playerVars"
     @ended="playerEnded"
     @paused="playerPaused"
@@ -31,9 +31,11 @@
   <hr/>
   <comment-list
     :comments="comments"
+    :commentNextPageBuffer="commentNextPageBuffer"
     :elapsedSeconds="time"
     :onShowNewComment="newCommentPauseFn"
     :style="commentListStyle"
+    :totalCommentCount="totalCommentCount"
     @commentFetchNext="commentFetchNext"
     @commentEdit="commentEdit"
     @commentDelete="commentDelete"
@@ -82,7 +84,11 @@ export default {
         return { rel: 0 }
       }
     },
-    videoId: {
+    totalCommentCount: {
+      type: Number,
+      default: 0
+    },
+    videoCode: {
       type: String,
       default: ''
     }

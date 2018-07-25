@@ -1,8 +1,15 @@
 <template>
   <div id="app">
+    <notifications group="base" />
+    <login-modal />
+    <ul class="top-bar">
+      <li class="header"><h1>{{ header }}</h1></li>
+      <li class="login-info"><p v-if="isAuthed">Logged in as {{ username }}</p></li>
+      <li class="login-info"><button @click="showLogin" v-if="!isAuthed">Sign In</button></li>
+      <li class="login-info"><button class="logout" @click="logout" v-if="isAuthed">Sign out</button></li>
+    </ul>
 
     <section>
-      <h1>{{ header }}</h1>
       <div>Select a Video</div>
       <v-select
         class="video-picker"
@@ -14,10 +21,11 @@
 
     <section>
       <orbit-helper
-        :video-id="currentVideo.code"
+        :video-code="currentVideo.code"
         :player-vars="{rel: 0}"
         :comments="videoComments"
-        :commentNextPageBuffer="5"
+        :commentNextPageBuffer="2"
+        :totalCommentCount="currentVideoTotalCommentCount"
         @commentDelete="handleCommentDelete"
         @commentEdit="handleCommentEdit"
         @commentFetchNext="handleCommentFetchNext"
@@ -30,38 +38,50 @@
 
 <script>
 import OrbitHelper from '../orbithelper/OrbitHelper.vue'
+import LoginModal from './components/LoginModal.vue'
 import {
   demoVideoOptions,
   demoComments
 } from './demo/constants'
-import { 
-  mapActions,
-  mapGetters,
-  mapState
-} from 'vuex'
 
 const noop = (() => {})
 
 export default {
   name: 'orbit-helper-demo',
-  components: { OrbitHelper },
+  components: { OrbitHelper, LoginModal },
   data () {
     return {
       header: 'orbit-helper-demo',
       comments: demoComments,
-      currentVideo: demoVideoOptions[0],
-      videoOptions: demoVideoOptions,
       noop
     }
   },
   computed: {
+    isAuthed () {
+      return this.$store.getters['auth/isAuthed']
+    },
     videoComments () {
-      return this.currentVideo ?
-        this.comments.filter(cmt => cmt.videoCode === this.currentVideo.code) : []
+      return this.$store.getters['comments/videoComments'](this.currentVideo.code)
+    },
+    currentVideoTotalCommentCount () {
+      return this.$store.getters['comments/currentVideoTotalCommentCount']
+    },
+    username () {
+      return this.$store.getters['auth/username']
+    },
+    videoOptions () {
+      return this.$store.getters['videos/videoOptions']
+    },
+    currentVideo: {
+      get () {
+        return this.$store.getters['videos/currentVideo']
+      },
+      set (vid) {
+        this.$store.dispatch('videos/selectVideo', vid)
+      }
     }
   },
   methods: {
-    // ...mapActions('comments', ['postComment']),
     handleCommentDelete (commentId) {
       this.$store.dispatch('comments/delete', commentId)
     },
@@ -77,7 +97,31 @@ export default {
         time,
         text
       })
+    },
+    showLogin () {
+      this.$modal.show('login-modal');
+    },
+    hideLogin () {
+      this.$modal.hide('login-modal');
+    },
+    showRegister () {
+      this.$modal.show('register');
+    },
+    hideRegister () {
+      this.$modal.hide('register');
+    },
+    logout () {
+      this.$store.dispatch('auth/logout')
+      this.$notify({
+        group: 'base',
+        type: 'success',
+        title: 'Logged out'
+      });
     }
+  },
+  created () {
+    this.$store.dispatch('auth/onAppStart')
+    this.$store.dispatch('videos/fetchVideoOptions')
   }
 }
 </script>
@@ -93,7 +137,6 @@ html {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 
 h1, h2 {
@@ -119,5 +162,14 @@ a {
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 10px;
+}
+
+.logout-button {
+  background-color: gray;
+}
+
+.top-bar {
+  li > .header { float: left }
+  li > .login-info { float: right }
 }
 </style>
