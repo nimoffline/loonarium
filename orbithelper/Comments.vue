@@ -46,19 +46,7 @@ export default {
   },
   computed: {
     commentCounter () {
-      let out = 'Showing'
-      const s = this.visibleCommentCount === 1 ? '' : 's'
-      out += ` ${this.visibleCommentCount} comment${s}`
-      if (this.totalCommentCount) out += ` of ${this.totalCommentCount}`
       return this.totalCommentCount
-    },
-    elapsedTime () {
-      const totalSeconds = Math.round(this.elapsedSeconds, 1)
-      let minutes = Math.floor(totalSeconds / 60)
-      let seconds = totalSeconds % 60
-      if (minutes < 10) minutes = '0' + minutes
-      if (seconds < 10) seconds = '0' + seconds
-      return `${minutes}:${seconds}`
     },
     localCommentsLength () {
       return this.comments.length
