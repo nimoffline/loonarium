@@ -8,75 +8,78 @@ export const demoVideoOptions = [
 let demoCmts = [
   {
     author: 'orbit',
-    timeStart: 58,
+    time: 58,
     id: 1,
     text: '현진 is seen repeatedly in front of a ferris wheel',
-    videoCode: 'a6JmCdDs_GM'
+    video_code: 'a6JmCdDs_GM'
   },
   {
     author: 'Ana Lysis',
-    timeStart: 62,
+    time: 62,
     id: 2,
     text: 'Choreo here is just a visualization of the lyrics',
-    videoCode: 'a6JmCdDs_GM'
+    video_code: 'a6JmCdDs_GM'
   },
   {
     author: 'halfEmpty',
-    timeStart: 63,
+    time: 63,
     id: 3,
     text: 'Vertical line of symmetry with buildings and choreo',
-    videoCode: 'a6JmCdDs_GM'
+    video_code: 'a6JmCdDs_GM'
   },
   {
     author: 'btw',
-    timeStart: 59,
+    time: 59,
     id: 4,
     text: '#streamsonatine nvm we\'re at 1m now :)',
-    videoCode: 'a6JmCdDs_GM'
+    video_code: 'a6JmCdDs_GM'
   },
   {
     author: 'author 68',
-    timeStart: 1,
+    time: 1,
     id: 5,
     text: 'this is the first of two comments on this song',
-    videoCode: 'k0MPgKG8oh4'
+    video_code: 'k0MPgKG8oh4'
   },
   {
     author: 'author 68',
-    timeStart: 5,
+    time: 5,
     id: 6,
     text: 'this is the second of two comments on this song',
-    videoCode: 'k0MPgKG8oh4'
+    video_code: 'k0MPgKG8oh4'
   },
   {
     author: 'whatAreThooooose',
-    timeStart: 207,
+    time: 207,
     id: 7,
     text: 'anyone know where I can get that coat?',
-    videoCode: 'SkNB5AsgZOc'
+    video_code: 'SkNB5AsgZOc'
   },
   {
     author: 'anon1988',
-    timeStart: 210,
+    time: 210,
     id: 8,
     text: 'love that break',
-    videoCode: 'SkNB5AsgZOc'
+    video_code: 'SkNB5AsgZOc'
   },
   {
     author: 'myguy',
-    timeStart: 211,
+    time: 211,
     id: 9,
     text: 'ok this is genius',
-    videoCode: 'SkNB5AsgZOc'
+    video_code: 'SkNB5AsgZOc'
   },
   {
     author: 'purple',
-    timeStart: 212,
+    time: 212,
     id: 10,
     text: 'CHORDS',
-    videoCode: 'SkNB5AsgZOc'
+    video_code: 'SkNB5AsgZOc'
   },
 ];
-demoCmts = demoCmts.sort((c1, c2) => c1.timeStart > c2.timeStart)
+demoCmts = demoCmts.sort((c1, c2) => c1.time > c2.time)
 
 export const demoComments = demoCmts
+
+export const API_URL = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:8000/api'
+export const BASE_URL = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:8000'

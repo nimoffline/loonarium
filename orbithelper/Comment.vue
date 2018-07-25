@@ -27,7 +27,7 @@ export default {
     },
     commentTime () {
       if (!this.comment) return ''
-      const totalSeconds = Math.floor(this.comment.timeStart)
+      const totalSeconds = Math.floor(this.comment.time)
       let minutes = Math.floor(totalSeconds / 60)
       let seconds = totalSeconds % 60
       if (minutes < 10) minutes = '0' + minutes

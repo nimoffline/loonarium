@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import Comment from './Comment.vue';
+import Comment from './Comment.vue'
 
 export default {
   name: 'comment-list',
@@ -24,6 +24,10 @@ export default {
       default () {
         return []
       }
+    },
+    commentNextPageBuffer: {
+      type: Number,
+      default: 5
     },
     totalCommentCount: {
       type: Number,
@@ -46,7 +50,7 @@ export default {
       const s = this.visibleCommentCount === 1 ? '' : 's'
       out += ` ${this.visibleCommentCount} comment${s}`
       if (this.totalCommentCount) out += ` of ${this.totalCommentCount}`
-      return out
+      return this.totalCommentCount
     },
     elapsedTime () {
       const totalSeconds = Math.round(this.elapsedSeconds, 1)
@@ -56,12 +60,15 @@ export default {
       if (seconds < 10) seconds = '0' + seconds
       return `${minutes}:${seconds}`
     },
+    localCommentsLength () {
+      return this.comments.length
+    },
     visibleComments () {
-      const arr = this.comments;
-      return arr.filter(cmt => this.elapsedSeconds >= cmt.timeStart).reverse()
+      const arr = this.comments
+      return arr.filter(cmt => this.elapsedSeconds >= cmt.time).reverse()
     },
     visibleCommentCount () {
-      return this.visibleComments.length;
+      return this.visibleComments.length
     }
   },
   watch: {
@@ -69,6 +76,9 @@ export default {
       immediate: true, 
       handler (newCount, oldCount) {
         if (newCount > oldCount) this.onShowNewComment();
+        if (newCount === this.localCommentsLength - this.commentNextPageBuffer) {
+          this.$emit('commentFetchNext')
+        }
       }
     }
   }
