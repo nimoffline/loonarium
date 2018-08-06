@@ -22,10 +22,11 @@
         :options="videoOptions"
       />
       <input-tag
-        class="author-filter"
-        :tags.sync="authorsToShow"
-        placeholder="(Optional) Only show comments from these authors..."
         :addTagOnKeys="endTagOn"
+        class="author-filter"
+        placeholder="(Optional) Only show comments from these authors..."
+        :tags.sync="authorsToShow"
+        :validate="usernameRegex"
       />
     </section>
 
@@ -50,6 +51,8 @@
 import OrbitHelper from '../orbithelper/OrbitHelper.vue'
 import LoginModal from './components/LoginModal.vue'
 import RegisterModal from './components/RegisterModal.vue'
+import usernameRegex from './constants/usernameRegex'
+import getQueryParams from './utils/queryParams'
 
 const noop = (() => {})
 const endTagOn = [9, 13, 32, 188]
@@ -61,7 +64,8 @@ export default {
     return {
       endTagOn,
       header: 'orbit-helper-demo',
-      noop
+      noop,
+      usernameRegex
     }
   },
   computed: {
@@ -133,6 +137,13 @@ export default {
   created () {
     this.$store.dispatch('auth/onAppStart')
     this.$store.dispatch('videos/fetchVideoOptions')
+  },
+  mounted () {
+    const { authors } = getQueryParams(window.location.search)
+    if (authors) {
+      const usernamesToShow = authors.split(',')
+      this.authorsToShow = usernamesToShow
+    }
   }
 }
 </script>
@@ -175,10 +186,6 @@ hr {
   margin-bottom: 20px;
 }
 
-.author-filter {
-  width: 50%;
-}
-
 .video-picker {
   display: block;
   width: 60%;
@@ -204,5 +211,35 @@ hr {
 .top-bar {
   li > .header { float: left }
   li > .login-info { float: right }
+}
+
+.vue-input-tag-wrapper {
+  -webkit-appearance: textfield;
+  background-color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: text;
+  display: inline-block !important;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding-left: 4px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  padding-right: 0px;
+  width: 50%;
+}
+
+.new-tag {
+  width: 100% !important;
+  background: transparent;
+  border: 0;
+  color: #777;
+  font-size: 13px;
+  margin-bottom: 0px;
+  margin-top: 1px;
+  outline: none;
+  border: none !important;
+  padding: 4px;
+  padding-left: 0 !important;
 }
 </style>
