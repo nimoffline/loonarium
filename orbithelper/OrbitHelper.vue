@@ -1,45 +1,53 @@
 <template>
-<div class="orbit-helper" :style="elementStyle">
-  <youtube
-    :video-id="videoCode"
-    :player-vars="playerVars"
-    @ended="playerEnded"
-    @paused="playerPaused"
-    @playing="playerPlaying"
-    @ready="playerReady"
-  >
-  </youtube>
-  <ul>
-    <label class="toggler">
-      <input
-        v-model="shouldPauseOnNewComment"
-        type="checkbox"/>
-        Pause on next comment
-    </label>
-    <label class="toggler">
-      <input
-        v-model="shouldShowComposer"
-        type="checkbox"/>
-        Show comment composer
-    </label>
-  </ul>
-  <comment-composer
-    v-show="shouldShowComposer"
-    :elapsedSeconds="time"
-    @post="commentPost"
-  />
-  <hr/>
-  <comment-list
-    :comments="comments"
-    :commentNextPageBuffer="commentNextPageBuffer"
-    :elapsedSeconds="time"
-    :onShowNewComment="newCommentPauseFn"
-    :style="commentListStyle"
-    :totalCommentCount="totalCommentCount"
-    @commentFetchNext="commentFetchNext"
-    @commentEdit="commentEdit"
-    @commentDelete="commentDelete"
-  />
+<div class="orbit-helper container" :style="elementStyle">
+  <div class="row">
+    <div id="orbithelper-video" class="col-xs-12 col-md-8 col-lg-7 orbithelper-video">
+      <youtube
+        player-width="100%"
+        :player-height="400"
+        :video-id="videoCode"
+        :player-vars="playerVars"
+        @ended="playerEnded"
+        @paused="playerPaused"
+        @playing="playerPlaying"
+        @ready="playerReady"
+      />
+    </div>
+    <div id="orbithelper-comments" class="col-xs-12 col-md-4 col-lg-5 align-left orbithelper-comments">
+      <ul>
+        <label class="toggler">
+          <input
+            v-model="shouldPauseOnNewComment"
+            type="checkbox"/>
+            Pause on next comment
+        </label><br/>
+        <label class="toggler">
+          <input
+            v-model="shouldShowComposer"
+            type="checkbox"/>
+            Show comment composer
+        </label>
+      </ul>
+      <comment-composer
+        v-show="shouldShowComposer"
+        :elapsedSeconds="time"
+        @post="commentPost"
+      />
+      <hr/>
+      <comment-list
+        :comments="comments"
+        :commentNextPageBuffer="commentNextPageBuffer"
+        :elapsedSeconds="time"
+        :onShowNewComment="newCommentPauseFn"
+        :style="commentListStyle"
+        :jumpToTime="jumpTo"
+        :totalCommentCount="totalCommentCount"
+        @commentFetchNext="commentFetchNext"
+        @commentEdit="commentEdit"
+        @commentDelete="commentDelete"
+      />
+    </div>
+  </div>
 </div>
 </template>
 
@@ -119,8 +127,8 @@ export default {
     commentFetchNext () {
       this.$emit('commentFetchNext')
     },
-    commentPost ({ time, text }) {
-      this.$emit('commentPost', { time, text })
+    commentPost ({ time, text, clearTextAreaFn }) {
+      this.$emit('commentPost', { time, text, clearTextAreaFn })
     },
     jumpTo (timeInSeconds) {
       // jump video to time (given in seconds, ex: 4.2157)
@@ -163,8 +171,21 @@ export default {
 </script>
 
 <style lang="scss">
+.orbit-helper {
+  width: 100%;
+  text-align: left;
+  margin: 0 auto;
+}
+
+.orbithelper-comments {
+  text-align: left;
+}
+
+.orbithelper-video {
+  text-align: center;
+}
+
 .toggler {
-  margin: 0 50px;
   -webkit-touch-callout: none; /* iOS Safari */
      -webkit-user-select: none; /* Safari */
       -khtml-user-select: none; /* Konqueror HTML */

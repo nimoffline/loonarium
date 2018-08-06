@@ -1,6 +1,6 @@
 <template>
   <div class="single-comment" v-if="!!comment">
-    <strong>{{commentAuthor}} @ {{commentTime}}</strong>
+    <strong>{{commentAuthor}} </strong><a class="" @click="jumpToComment">{{commentTime}}</a>
     <br/>
     <span>{{commentText}}</span>
     <hr/>
@@ -19,6 +19,7 @@ export default {
     },
     commentDelete: Function,
     commentEdit: Function,
+    jumpToTime: Function,
   },
   computed: {
     commentText () {
@@ -32,11 +33,21 @@ export default {
       let seconds = totalSeconds % 60
       if (minutes < 10) minutes = '0' + minutes
       if (seconds < 10) seconds = '0' + seconds
-      return `${minutes}:${seconds}`
+      let centis = Math.round((this.comment.time - seconds) * 100);
+      let centiStr = '' + centis
+      if (centiStr.length === 1) {
+        centiStr += '0'
+      }
+      return `${minutes}:${seconds}.${centiStr}`
     },
     commentAuthor () {
       if (!this.comment) return ''
       return this.comment.author
+    }
+  },
+  methods: {
+    jumpToComment () {
+      this.jumpToTime(this.comment.time + 0.01)
     }
   }
 }
@@ -51,5 +62,9 @@ export default {
 span {
   margin: 0 0;
   --webkit-margin-before: 0;
+}
+
+a {
+  color: gray;
 }
 </style>
