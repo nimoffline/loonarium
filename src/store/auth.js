@@ -10,6 +10,7 @@ import {
 
 Vue.use(Vuex)
 
+const usernameRegex = /^[0-9a-zA-Z_]{1,15}$/
 const state = () => ({
   currentUser: {} // { token, username }
 })
@@ -44,15 +45,23 @@ const actions = {
       onError('Username too long', 'Usernames should be 15 or fewer characters.')
       return
     }
+    if (!usernameRegex.test(username)) {
+      onError('Invalid username', 'Alphanumeric and underscore characters only. ex: Stan_loona_12')
+      return 
+    }
     if (password.length < 8) {
       onError('Password too short', 'Password should be 8 or more characters')
       return
+    }
+    if (password !== passwordVerif) {
+      onError('Passwords do not match')
+      return 
     }
 
     try {
       const { token } = await createUser(username, password, passwordVerif)
       commit('SET_CURRENT_USER', { token, username })
-      hideFn('login-modal')
+      hideFn('register-modal')
       onSuccess('Logged in')
     } catch (e) {
       let msg = ''

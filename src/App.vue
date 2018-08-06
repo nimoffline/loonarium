@@ -2,15 +2,19 @@
   <div id="app">
     <notifications group="base" />
     <login-modal />
+    <register-modal />
     <ul class="top-bar">
       <li class="header"><h1>{{ header }}</h1></li>
       <li class="login-info"><p v-if="isAuthed">Logged in as {{ username }}</p></li>
-      <li class="login-info"><button @click="showLogin" v-if="!isAuthed">Sign In</button></li>
+      <li class="login-info"><button @click="showRegister" v-if="!isAuthed">Register</button></li>
+      <li class="login-info"><button @click="showLogin" v-if="!isAuthed">Log In</button></li>
       <li class="login-info"><button class="logout" @click="logout" v-if="isAuthed">Sign out</button></li>
     </ul>
+    <p>Annotated videos to help Orbits get started on Loonaverse theorycrafting</p>
+    <br/>
 
     <section>
-      <div>Select a Video</div>
+      <span>Select a Video</span>
       <v-select
         class="video-picker"
         label="title"
@@ -39,20 +43,16 @@
 <script>
 import OrbitHelper from '../orbithelper/OrbitHelper.vue'
 import LoginModal from './components/LoginModal.vue'
-import {
-  demoVideoOptions,
-  demoComments
-} from './demo/constants'
+import RegisterModal from './components/RegisterModal.vue'
 
 const noop = (() => {})
 
 export default {
   name: 'orbit-helper-demo',
-  components: { OrbitHelper, LoginModal },
+  components: { OrbitHelper, LoginModal, RegisterModal },
   data () {
     return {
       header: 'orbit-helper-demo',
-      comments: demoComments,
       noop
     }
   },
@@ -91,24 +91,19 @@ export default {
     handleCommentFetchNext () {
       this.$store.dispatch('comments/fetchNextPage')
     },
-    handleCommentPost ({ time, text }) {
+    handleCommentPost ({ time, text, clearTextAreaFn }) {
       this.$store.dispatch('comments/post', {
         code: this.currentVideo.code,
         time,
-        text
+        text,
+        clearTextAreaFn
       })
+    },
+    showRegister () {
+      this.$modal.show('register-modal');
     },
     showLogin () {
       this.$modal.show('login-modal');
-    },
-    hideLogin () {
-      this.$modal.hide('login-modal');
-    },
-    showRegister () {
-      this.$modal.show('register');
-    },
-    hideRegister () {
-      this.$modal.hide('register');
     },
     logout () {
       this.$store.dispatch('auth/logout')
@@ -127,7 +122,9 @@ export default {
 </script>
 
 <style lang="scss">
-html {
+@import "./assets/normalize.css";
+@import "./assets/bootstrap.css";
+body {
   background-color: lightgray;
 }
 
@@ -157,11 +154,27 @@ a {
   color: #42b983;
 }
 
+hr {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
 .video-picker {
+  display: block;
   width: 60%;
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 10px;
+  text-align: left;
+  .li {
+    margin-bottom: 10px;
+  }
+}
+
+.dropdown li {
+  display: block;
+  width: 100%;
+  align-items: left;
 }
 
 .logout-button {
