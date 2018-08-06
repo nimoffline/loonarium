@@ -60,6 +60,8 @@ export default {
 
 .composer-textarea {
   width: 100%;
+  border: none;
+  border-radius: 3px;
 }
 
 .composer-button {
