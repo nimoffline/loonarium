@@ -19,7 +19,6 @@ const getters = {
     // 1:00 comment should show up above 0:59 comment
     return state.comments
       .filter(cmt => cmt && cmt.video_code === videoId)
-      .sort((c1, c2) => c1.time > c2.time)
   },
   nextPageUrl: (state) => {
     return state.paging.next
@@ -64,7 +63,7 @@ const actions = {
       commit('ADD_COMMENTS', paging.results)
     }
   },
-  async post ({ commit, rootGetters }, { code, time, text }) {
+  async post ({ commit, rootGetters }, { code, time, text, clearTextAreaFn }) {
     if (!code || !text) return
     if (!rootGetters['auth/isAuthed']) {
       Vue.notify({
@@ -83,6 +82,7 @@ const actions = {
         title: 'Comment Submitted',
         type: 'success'
       })
+      clearTextAreaFn()
     } catch (e) {
       Vue.notify({
         group: 'base',

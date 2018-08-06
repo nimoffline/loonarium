@@ -1,9 +1,9 @@
 <template>
-<modal name="login-modal" transition="pop-out" :width="modalWidth" :height="400">
+<modal name="register-modal" transition="pop-out" :width="modalWidth" :height="400">
   <div class="box">
     <div class="box-part" id="bp-left">
       <div class="partition" id="partition-register">
-        <div class="partition-title">Log in</div>
+        <div class="partition-title">Register to leave notes!</div>
         <div class="partition-form">
           <form autocomplete="false">
 
@@ -12,14 +12,19 @@
             </div>
 
             <input id="n-username" v-model="username" type="text" placeholder="Username">
-            <input id="n-password2" v-model="password" type="password" placeholder="Password">
+            <input id="n-password" v-model="password" type="password" placeholder="Password (8+ chars)">
+            <input id="n-password2" v-model="password2" type="password" placeholder="Password again">
             <div style="margin-top: 42px">
             </div>
 
             <div class="button-set">
-              <button class="center-block" type="submit" id="goto-signin-btn" @click.prevent="login">Log In</button>
+              <button class="center-block" type="submit" id="goto-signin-btn" @click.prevent="register">Register</button>
             </div>
           </form>
+        </div>
+        <div class="partition-text">
+          <p>Fields accept alphanumeric and underscore characters only:</p>
+          <p>A~Z a~z 0~9 _</p>
         </div>
       </div>
     </div>
@@ -34,25 +39,26 @@
 // from https://github.com/euvl/vue-js-modal/blob/master/demo/client_side_rendering/src/components/modals/DemoLoginModal.vue
 const MODAL_WIDTH = 328
 export default {
-  name: 'LoginModal',
+  name: 'RegisterModal',
   data () {
     return {
       modalWidth: MODAL_WIDTH,
       username: '',
-      password: ''
+      password: '',
+      password2: ''
     }
   },
   methods: {
-    login () {
+    register () {
       const data = {
         username: this.username,
         password: this.password,
+        passwordVerif: this.password2,
         hideFn: this.$modal.hide,
         onError: this.onError,
-        onSuccess: this.onSuccess,
+        onSuccess: this.onSuccess
       }
-      this.$store.dispatch('auth/login', data)
-      this.password = ''
+      this.$store.dispatch('auth/register', data)
     },
     onError (title, text) {
       this.$notify({
@@ -136,6 +142,13 @@ $background_color: #404142;
     .partition-form {
       padding: 0 20px;
       box-sizing: border-box;
+    }
+    .partition-text {
+      box-sizing: border-box;
+      padding: 5px 20px;
+      width: 100%;
+      text-align: center;
+      font-size: 14px;
     }
   }
   input[type=password],

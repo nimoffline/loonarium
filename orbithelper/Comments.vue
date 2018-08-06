@@ -2,11 +2,9 @@
   <div class="comment-list-div">
     <div class="comment-list">
       <div v-for="c in visibleComments" :key="c.id" >
-        <comment :comment="c" />
+        <comment :comment="c" :jumpToTime="jumpToTime"/>
       </div>
     </div>
-    <hr/>
-    <h3>{{commentCounter}}</h3>
   </div>
 </template>
 
@@ -29,6 +27,7 @@ export default {
       type: Number,
       default: 5
     },
+    jumpToTime: Function,
     totalCommentCount: {
       type: Number,
       default: 0
@@ -53,7 +52,7 @@ export default {
     },
     visibleComments () {
       const arr = this.comments
-      return arr.filter(cmt => this.elapsedSeconds >= cmt.time).reverse()
+      return arr.filter(cmt => this.elapsedSeconds >= cmt.time).sort((c1, c2) => c2.time - c1.time)
     },
     visibleCommentCount () {
       return this.visibleComments.length
@@ -75,7 +74,7 @@ export default {
 
 <style lang="scss">
 .comment-list-div {
-  margin: 5px 10%;
+  margin: 5px 0;
 }
 .comment-list {
   text-align: left;

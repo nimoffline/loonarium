@@ -4,7 +4,6 @@
       class="composer-textarea"
       v-model="commentText"
       rows="5"
-      cols="80"
       placeholder="Enter something insightful about what's on screen right now!"
     />
     <br/>
@@ -26,7 +25,7 @@ export default {
   },
   computed: {
     elapsedTime () {
-      const totalSeconds = Math.round(this.elapsedSeconds, 1)
+      const totalSeconds = Math.floor(this.elapsedSeconds)
       let minutes = Math.floor(totalSeconds / 60)
       let seconds = totalSeconds % 60
       if (minutes < 10) minutes = '0' + minutes
@@ -40,10 +39,15 @@ export default {
     }
   },
   methods: {
-    submitComment () {
-      this.$emit('post', { time: this.elapsedSeconds, text: this.commentText })
+    clearTextAreaFn () {
       this.commentText = '' 
-      // TODO somehow make sure the comment posts successfully before clearing
+    },
+    submitComment () {
+      this.$emit('post', {
+        time: this.elapsedSeconds,
+        text: this.commentText,
+        clearTextAreaFn: this.clearTextAreaFn
+      })
     }
   }
 }
@@ -52,10 +56,10 @@ export default {
 <style lang="scss">
 .comment-composer {
   color: black;
-  padding-top: 20px;
 }
 
 .composer-textarea {
+  width: 100%;
 }
 
 .composer-button {
