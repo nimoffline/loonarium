@@ -1,6 +1,7 @@
 import 'es6-promise/auto'
 import Vue from 'vue'
 import Vuex from 'vuex'
+import usernameRegex from '../constants/usernameRegex'
 import {
   recoverAuthToken,
   logout,
@@ -10,7 +11,7 @@ import {
 
 Vue.use(Vuex)
 
-const usernameRegex = /^[0-9a-zA-Z_]{1,15}$/
+
 const state = () => ({
   currentUser: {} // { token, username }
 })
