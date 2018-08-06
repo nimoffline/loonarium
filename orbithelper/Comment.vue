@@ -1,6 +1,6 @@
 <template>
   <div class="single-comment" v-if="!!comment">
-    <strong>{{commentAuthor}} </strong><a class="" @click="jumpToComment">{{commentTime}}</a>
+    <strong>{{commentAuthor}} </strong><a href="#orbithelper-video" class="" @click="jumpToComment">{{commentTime}}</a>
     <br/>
     <span>{{commentText}}</span>
     <hr/>
