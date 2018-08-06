@@ -13,14 +13,20 @@
     <p>Annotated videos to help Orbits get started on Loonaverse theorycrafting</p>
     <br/>
 
-    <section>
+    <section class="center-block">
       <span>Select a Video</span>
       <v-select
         class="video-picker"
         label="title"
         v-model="currentVideo"
-        :options="videoOptions">
-      </v-select>
+        :options="videoOptions"
+      />
+      <input-tag
+        class="author-filter"
+        :tags.sync="authorsToShow"
+        placeholder="(Optional) Only show comments from these authors..."
+        :addTagOnKeys="endTagOn"
+      />
     </section>
 
     <section>
@@ -46,12 +52,14 @@ import LoginModal from './components/LoginModal.vue'
 import RegisterModal from './components/RegisterModal.vue'
 
 const noop = (() => {})
+const endTagOn = [9, 13, 32, 188]
 
 export default {
   name: 'orbit-helper-demo',
   components: { OrbitHelper, LoginModal, RegisterModal },
   data () {
     return {
+      endTagOn,
       header: 'orbit-helper-demo',
       noop
     }
@@ -79,7 +87,15 @@ export default {
       set (vid) {
         this.$store.dispatch('videos/selectVideo', vid)
       }
-    }
+    },
+    authorsToShow: {
+      get () {
+        return this.$store.getters['comments/authorsToShow']
+      },
+      set (authors) {
+        this.$store.commit('comments/SET_AUTHORS_TO_SHOW', authors)
+      }
+    },
   },
   methods: {
     handleCommentDelete (commentId) {
@@ -157,6 +173,10 @@ a {
 hr {
   margin-top: 20px;
   margin-bottom: 20px;
+}
+
+.author-filter {
+  width: 50%;
 }
 
 .video-picker {
