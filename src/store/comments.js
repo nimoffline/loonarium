@@ -12,6 +12,7 @@ Vue.use(Vuex)
 const state = () => ({
   comments: [],
   paging: {},
+  authorsToShow: new Set()
 })
 
 const getters = {
@@ -19,12 +20,16 @@ const getters = {
     // 1:00 comment should show up above 0:59 comment
     return state.comments
       .filter(cmt => cmt && cmt.video_code === videoId)
+      .filter(cmt => !state.authorsToShow.size || (state.authorsToShow.has(cmt.author.toLowerCase())))
   },
   nextPageUrl: (state) => {
     return state.paging.next
   },
   currentVideoTotalCommentCount: (state) => {
     return state.paging.count || 0
+  },
+  authorsToShow: (state) => {
+    return [...state.authorsToShow];
   }
 }
 
@@ -46,6 +51,15 @@ const mutations = {
   },
   DELETE_COMMENT (state, commentId) {
     state.comments = state.comments.filter(cmt => cmt.id !== commentId)
+  },
+  SET_AUTHORS_TO_SHOW (state, usernames) {
+    if (usernames) {
+      const usernamesLower = usernames.map(x => x.toLowerCase())
+      state.authorsToShow = new Set([...usernamesLower])
+    }
+  },
+  REMOVE_AUTHOR_TO_SHOW (state, username) {
+    state.authorsToShow.delete(username)
   }
 }
 
