@@ -8,7 +8,7 @@
     />
     <br/>
     <button
-      class="composer-button"
+      class="btn composer-button"
       @click="submitComment"
     >Post at ~{{elapsedTime}}</button>
   </div>
@@ -61,9 +61,11 @@ export default {
 .composer-textarea {
   width: 100%;
   border: none;
-  border-radius: 3px;
+  border-radius: 5px;
+  padding: 5px;
 }
 
 .composer-button {
+  font-size: 14px;
 }
 </style>

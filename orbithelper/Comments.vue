@@ -1,5 +1,6 @@
 <template>
   <div class="comment-list-div">
+    <h3 class="center center-block">Comments</h3>
     <div class="comment-list">
       <div v-for="c in visibleComments" :key="c.id" >
         <comment :comment="c" :jumpToTime="jumpToTime"/>

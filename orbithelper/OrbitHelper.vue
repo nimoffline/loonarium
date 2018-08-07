@@ -4,7 +4,7 @@
     <div id="orbithelper-video" class="col-xs-12 col-md-8 col-lg-7 orbithelper-video">
       <youtube
         player-width="100%"
-        :player-height="400"
+        :player-height="playerHeight"
         :video-id="videoCode"
         :player-vars="playerVars"
         @ended="playerEnded"
@@ -19,13 +19,13 @@
           <input
             v-model="shouldPauseOnNewComment"
             type="checkbox"/>
-            Pause on next comment
-        </label><br/>
+            Pause on Comment
+        </label> &nbsp;
         <label class="toggler">
           <input
             v-model="shouldShowComposer"
             type="checkbox"/>
-            Show comment composer
+            Comment Box
         </label>
       </ul>
       <comment-composer
@@ -105,10 +105,11 @@ export default {
     return {
       header: 'orbit-helper',
       interval: UPDATE_INTERVAL_PLAYING,
+      playerHeight: 400,
       time: 0, // elapsed time in seconds (with decimals)
       timer: null,
       shouldPauseOnNewComment: false,
-      shouldShowComposer: true,
+      shouldShowComposer: false,
       visibleCommentCount: 0
     }
   },
@@ -129,6 +130,10 @@ export default {
     },
     commentPost ({ time, text, clearTextAreaFn }) {
       this.$emit('commentPost', { time, text, clearTextAreaFn })
+    },
+    handleWindowResize () {
+      if (window.innerWidth < 500) this.playerHeight = 300
+      else this.playerHeight = 400
     },
     jumpTo (timeInSeconds) {
       // jump video to time (given in seconds, ex: 4.2157)
@@ -164,8 +169,12 @@ export default {
       }, this.interval)
     }
   },
+  mounted () {
+    window.addEventListener('resize', this.handleWindowResize)
+  },
   beforeDestroy () {
     this.resetTimer()
+    window.removeEventListener('resize', this.handleWindowResize)
   }
 }
 </script>

@@ -1,8 +1,8 @@
 <template>
-  <div class="single-comment" v-if="!!comment">
+  <div class="single-comment fade-in" v-if="!!comment">
     <strong>{{commentAuthor}} </strong><a href="#orbithelper-video" class="" @click="jumpToComment">{{commentTime}}</a>
     <br/>
-    <span>{{commentText}}</span>
+    <span v-html="commentText"></span>
     <hr/>
   </div>
 </template>
@@ -24,7 +24,7 @@ export default {
   computed: {
     commentText () {
       if (!this.comment) return ''
-      return this.comment.text.trim()
+      return this.comment.text
     },
     commentTime () {
       if (!this.comment) return ''
@@ -54,14 +54,37 @@ export default {
 </script>
 
 <style lang="scss">
+@-webkit-keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.fade-in {
+   -webkit-animation-name: fade-in;
+           animation-name: fade-in;
+}
+
 .single-comment {
   color: black;
   white-space: pre-wrap;
+  -webkit-animation-duration: 0.7s;
+          animation-duration: 0.7s;
 }
 
 span {
   margin: 0 0;
-  --webkit-margin-before: 0;
 }
 
 a {
