@@ -1,14 +1,13 @@
-// https://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript#2880929
-const getQueryStringParams = query => {
-  return query
-    ? (/^[?#]/.test(query) ? query.slice(1) : query)
-      .split('&')
-      .reduce((params, param) => {
-          let [key, value] = param.split('=');
-          params[key] = value ? decodeURIComponent(value.replace(/\+/g, ' ')) : '';
-          return params;
-        }, {}
-      )
-    : {}
+import queryString from 'query-string'
+
+export const getQueryParams = () => {
+  return queryString.parse(window.location.search)
 };
-export default getQueryStringParams
+
+export const setQueryParams = paramDict => {
+  const queryParams = queryString.parse(window.location.search)
+  Object.keys(paramDict).forEach(key => {
+    queryParams[key] = paramDict[key]
+  })
+  window.history.replaceState(null, '', `?${queryString.stringify(queryParams)}`)
+}

@@ -1,18 +1,16 @@
 <template>
   <div id="app">
-    <notifications group="base" />
+    <notifications group="base" position="top left" />
     <login-modal />
     <register-modal />
     <ul class="top-bar">
-      <li class="header"><h1>{{ header }}</h1></li>
-      <li class="login-info"><p v-if="isAuthed">Logged in as {{ username }}</p></li>
-      <li class="login-info"><button @click="showRegister" v-if="!isAuthed">Register</button></li>
-      <li class="login-info"><button @click="showLogin" v-if="!isAuthed">Log In</button></li>
-      <li class="login-info"><button class="logout" @click="logout" v-if="isAuthed">Sign out</button></li>
+      <li><h1>{{ header }}</h1></li>
+      <li class="login-info"><button class="btn" @click="showRegister" v-if="!isAuthed">Register</button></li>
+      <li class="login-info"><button class="btn" @click="showLogin" v-if="!isAuthed">Log In</button></li>
+      <li class="login-info"><button class="btn logout" @click="logout" v-if="isAuthed">Log out ({{username}})</button></li>
     </ul>
-    <p>Annotated videos to help Orbits get started on Loonaverse theorycrafting</p>
-    <br/>
-
+    <h3 class="subheader">Annotated videos for Loonaverse deep dives</h3>
+    <hr/>
     <section class="center-block">
       <span>Select a Video</span>
       <v-select
@@ -52,7 +50,7 @@ import OrbitHelper from '../orbithelper/OrbitHelper.vue'
 import LoginModal from './components/LoginModal.vue'
 import RegisterModal from './components/RegisterModal.vue'
 import usernameRegex from './constants/usernameRegex'
-import getQueryParams from './utils/queryParams'
+import { getQueryParams } from './utils/queryParams'
 
 const noop = (() => {})
 const endTagOn = [9, 13, 32, 188]
@@ -63,7 +61,7 @@ export default {
   data () {
     return {
       endTagOn,
-      header: 'orbit-helper-demo',
+      header: 'orbit-helper',
       noop,
       usernameRegex
     }
@@ -135,15 +133,13 @@ export default {
     }
   },
   created () {
-    this.$store.dispatch('auth/onAppStart')
-    this.$store.dispatch('videos/fetchVideoOptions')
-  },
-  mounted () {
-    const { authors } = getQueryParams(window.location.search)
+    const { authors, v } = getQueryParams()
     if (authors) {
       const usernamesToShow = authors.split(',')
       this.authorsToShow = usernamesToShow
     }
+    this.$store.dispatch('auth/onAppStart')
+    this.$store.dispatch('videos/fetchVideoOptions', { preselect: +v })
   }
 }
 </script>
@@ -163,22 +159,21 @@ body {
   color: #2c3e50;
 }
 
-h1, h2 {
-  font-weight: normal;
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-
 a {
   color: #42b983;
+}
+
+h1 {
+  font-weight: normal;
+  font-size: 1.8em;
+  margin-left: 0.2em;
+  margin-top: 0.6em;
+}
+
+h3 {
+  font-weight: normal;
+  padding: 0;
+  margin: 0;
 }
 
 hr {
@@ -186,9 +181,51 @@ hr {
   margin-bottom: 20px;
 }
 
-.video-picker {
+li {
   display: block;
-  width: 60%;
+  margin: 0 10px;
+}
+
+ul {
+  list-style-type: none;
+  -webkit-margin-before: 0;
+          margin-before: 0;
+  -webkit-padding-start: 0;
+          padding-start: 0;
+}
+
+.btn {
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  &:hover {
+    background-color: #cde69c !important;
+  }
+}
+
+.top-bar {
+  display: inline-block;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  li {
+    float: left;
+    display: block;
+  }
+}
+
+.login-info {
+  margin-top: 1.2em;
+  float: right !important;
+}
+
+.video-picker {
+  background-color: white;
+  border: none !important;
+  border-radius: 5px !important;
+  display: block;
+  min-width: 360px;
+  width: 70%;
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 10px;
@@ -198,35 +235,21 @@ hr {
   }
 }
 
-.dropdown li {
-  display: block;
-  width: 100%;
-  align-items: left;
-}
-
-.logout-button {
-  background-color: gray;
-}
-
-.top-bar {
-  li > .header { float: left }
-  li > .login-info { float: right }
-}
-
 .vue-input-tag-wrapper {
   -webkit-appearance: textfield;
   background-color: white;
-  border: none;
-  border-radius: 4px;
+  border: none !important;
+  border-radius: 5px !important;
   cursor: text;
   display: inline-block !important;
+  min-width: 360px;
   overflow-x: hidden;
   overflow-y: auto;
   padding-left: 4px;
   padding-top: 0px;
   padding-bottom: 0px;
   padding-right: 0px;
-  width: 50%;
+  width: 70%;
 }
 
 .new-tag {
