@@ -19,13 +19,6 @@
         v-model="currentVideo"
         :options="videoOptions"
       />
-      <input-tag
-        :addTagOnKeys="endTagOn"
-        class="author-filter"
-        placeholder="(Optional) Only show comments from these authors..."
-        :tags.sync="authorsToShow"
-        :validate="usernameRegex"
-      />
     </section>
 
     <section>
@@ -41,7 +34,24 @@
         @commentPost="handleCommentPost"
       />
     </section>
-
+    <section class="section-bottom" id="optional-settings">
+      <input-tag
+        :addTagOnKeys="endTagOn"
+        class="author-filter"
+        placeholder="(Optional) Only show comments from these authors..."
+        :tags.sync="authorsToShow"
+        :validate="usernameRegex"
+      />
+    </section>
+    <footer id="footer">
+      <a href="https://github.com/choiryan/orbithelper">Github</a>
+      &nbsp;|&nbsp;
+      <a href="https://loonaverse.github.io/">loonaverse.github.io</a>
+      &nbsp;|&nbsp;
+      <a href="https://www.google.com/search?q=loonatheworld.com">loonatheworld</a>
+      &nbsp;|&nbsp;
+      <a href="https://www.google.com/search?q=dlrowehtanool.com">dlrowehtanool</a>
+    </footer>
   </div>
 </template>
 
@@ -161,6 +171,10 @@ body {
 
 a {
   color: #42b983;
+}
+
+footer {
+  margin-top: 10px;
 }
 
 h1 {
