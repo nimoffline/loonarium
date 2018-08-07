@@ -6,6 +6,7 @@ import {
   getUrl
 } from '../services/api'
 import uniq from '../utils/makeUnique'
+import linkify from '../utils/linkify'
 
 Vue.use(Vuex)
 
@@ -16,19 +17,19 @@ const state = () => ({
 })
 
 const getters = {
-  videoComments: (state, getters) => (videoId) => {
+  videoComments: (state, getters) => videoId => {
     // 1:00 comment should show up above 0:59 comment
     return state.comments
       .filter(cmt => cmt && cmt.video_code === videoId)
       .filter(cmt => !state.authorsToShow.size || (state.authorsToShow.has(cmt.author.toLowerCase())))
   },
-  nextPageUrl: (state) => {
+  nextPageUrl: state => {
     return state.paging.next
   },
-  currentVideoTotalCommentCount: (state) => {
+  currentVideoTotalCommentCount: state => {
     return state.paging.count || 0
   },
-  authorsToShow: (state) => {
+  authorsToShow: state => {
     return [...state.authorsToShow];
   }
 }
@@ -36,9 +37,13 @@ const getters = {
 // define the possible mutations that can be applied to our state
 const mutations = {
   ADD_COMMENT (state, comment) {
+    comment.text = linkify(comment.text.trim())
     state.comments = uniq([...state.comments, comment], 'id')
   },
   ADD_COMMENTS (state, comments=[]) {
+    comments.map(cmt => {
+      cmt.text = linkify(cmt.text.trim())
+    })
     state.comments = uniq([...state.comments, ...comments], 'id')
   },
   EDIT_PAGING (state, paging={}) {
@@ -87,6 +92,7 @@ const actions = {
       })
       return
     }
+    text = text.trim()
 
     try {
       const data = await commentPost({ code, time, text })
@@ -98,6 +104,7 @@ const actions = {
       })
       clearTextAreaFn()
     } catch (e) {
+      console.log(e)
       Vue.notify({
         group: 'base',
         title: 'Failed to submit comment',

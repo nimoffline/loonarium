@@ -17,7 +17,7 @@
             </div>
 
             <div class="button-set">
-              <button class="center-block" type="submit" id="goto-signin-btn" @click.prevent="login">Log In</button>
+              <button class="center-block btn" type="submit" id="goto-signin-btn" @click.prevent="login">Log In</button>
             </div>
           </form>
         </div>
