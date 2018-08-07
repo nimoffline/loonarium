@@ -1,8 +1,8 @@
-# orbithelper
+# orbit-helper
 
 > Vue SPA concept for collaborative MV analysis on Youtube
 
-![Demo GIF](https://thumbs.gfycat.com/EntireUnrealisticAfricanpiedkingfisher-size_restricted.gif)
+![Demo GIF](https://thumbs.gfycat.com/LastMajorIcefish-size_restricted.gif)
 
 ## Build Setup
 
