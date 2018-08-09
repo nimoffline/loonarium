@@ -33,6 +33,7 @@
         :player-vars="{rel: 0}"
         :comments="videoComments"
         :commentNextPageBuffer="10"
+        :currentUserId="currentUserId"
         :totalCommentCount="currentVideoTotalCommentCount"
         @commentDelete="handleCommentDelete"
         @commentEdit="handleCommentEdit"
@@ -86,6 +87,9 @@ export default {
     isAuthed () {
       return this.$store.getters['auth/isAuthed']
     },
+    currentUserId () {
+      return this.$store.getters['auth/userId']
+    },
     videoComments () {
       return this.$store.getters['comments/videoComments'](this.currentVideo.code)
     },
@@ -119,8 +123,8 @@ export default {
     handleCommentDelete (commentId) {
       this.$store.dispatch('comments/delete', commentId)
     },
-    handleCommentEdit ({ commentId, time, text }) {
-      this.$store.dispatch('comments/edit')
+    handleCommentEdit (data) {
+      this.$store.dispatch('comments/edit', data)
     },
     handleCommentFetchNext () {
       this.$store.dispatch('comments/fetchNextPage')
@@ -134,10 +138,10 @@ export default {
       })
     },
     showRegister () {
-      this.$modal.show('register-modal');
+      this.$modal.show('register-modal')
     },
     showLogin () {
-      this.$modal.show('login-modal');
+      this.$modal.show('login-modal')
     },
     logout () {
       this.$store.dispatch('auth/logout')
@@ -224,6 +228,10 @@ ul {
   font-style: italic;
 }
 
+.no-select {
+  user-select: none;
+}
+
 .subheader {
   margin: 0;
 }
@@ -237,6 +245,7 @@ ul {
   width: 100%;
   padding: 0;
   margin: 0;
+  user-select: none;
   li {
     float: left;
     display: block;
@@ -251,6 +260,7 @@ ul {
 .logo {
   margin-top: 0.3em;
 }
+
 .logo-text {
   margin-top: 0;
 }

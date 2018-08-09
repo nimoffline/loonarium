@@ -1,5 +1,6 @@
 <template>
 <div class="video-comment-player container" :style="elementStyle">
+  <v-dialog />
   <div class="row">
     <div id="video-comment-player-video" class="col-xs-12 col-md-8 col-lg-7 video-comment-player-video">
       <youtube
@@ -37,6 +38,7 @@
       <comment-list
         :comments="comments"
         :commentNextPageBuffer="commentNextPageBuffer"
+        :currentUserId="currentUserId"
         :elapsedSeconds="time"
         :onShowNewComment="newCommentPauseFn"
         :style="commentListStyle"
@@ -80,6 +82,10 @@ export default {
         return {}
       }
     },
+    currentUserId: {
+      type: String,
+      default: '',
+    },
     elementStyle: {
       type: Object,
       default () {
@@ -121,8 +127,8 @@ export default {
     commentDelete (commentId) {
       this.$emit('commentDelete', commentId)
     },
-    commentEdit (commentId, time, text) {
-      this.$emit('commentEdit', { commentId, time, text })
+    commentEdit ({ comment, onSuccess }) {
+      this.$emit('commentEdit', { comment, onSuccess })
     },
     commentFetchNext () {
       this.$emit('commentFetchNext')
@@ -179,6 +185,10 @@ export default {
 </script>
 
 <style lang="scss">
+.red {
+  color: red;
+}
+
 .video-comment-player {
   width: 100%;
   text-align: left;

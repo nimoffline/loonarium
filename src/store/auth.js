@@ -20,6 +20,9 @@ const getters = {
   username (state) {
     return state.currentUser.username
   },
+  userId (state) {
+    return state.currentUser.id
+  },
   isAuthed (state) {
     return !!state.currentUser.token
   }
@@ -34,8 +37,8 @@ const mutations = {
 
 const actions = {
   onAppStart ({ commit }) {
-    const { token, username } = recoverAuthToken()
-    commit('SET_CURRENT_USER', { token, username })
+    const { token, username, id } = recoverAuthToken()
+    commit('SET_CURRENT_USER', { token, username, id })
   },
   async register ({ commit, dispatch }, {username, password, passwordVerif, hideFn, onError, onSuccess }) {
     if (!username || !password || !passwordVerif) {
@@ -60,8 +63,8 @@ const actions = {
     }
 
     try {
-      const { token } = await createUser(username, password, passwordVerif)
-      commit('SET_CURRENT_USER', { token, username })
+      const { token, id } = await createUser(username, password, passwordVerif)
+      commit('SET_CURRENT_USER', { token, username, id })
       hideFn('register-modal')
       onSuccess('Logged in')
     } catch (e) {
@@ -83,8 +86,8 @@ const actions = {
   },
   async login ({ commit, dispatch }, { username, password, hideFn, onError, onSuccess }) {
     try {
-      const { token } = await login(username, password)
-      commit('SET_CURRENT_USER', { token, username })
+      const { token, username: remoteUsername, id } = await login(username, password)
+      commit('SET_CURRENT_USER', { token, username: remoteUsername, id })
       hideFn('login-modal')
       onSuccess('Logged in')
     } catch (e) {

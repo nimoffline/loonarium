@@ -225,6 +225,9 @@ textarea {
   font-family: inherit;
   font-size: inherit;
   line-height: inherit;
+  border: none;
+  border-radius: 5px;
+  padding: 5px;
 }
 a {
   text-decoration: none;
@@ -232,7 +235,6 @@ a {
 a:hover,
 a:focus {
   color: #23527c;
-  text-decoration: underline;
   cursor: pointer;
 }
 a:focus {

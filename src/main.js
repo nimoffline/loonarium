@@ -12,7 +12,7 @@ import store from './store'
 Vue.component('input-tag', InputTag);
 Vue.component('v-select', vSelect)
 Vue.use(VueYouTubeEmbed)
-Vue.use(VModal)
+Vue.use(VModal, { dialog: true })
 Vue.use(Notifications)
 
 new Vue({

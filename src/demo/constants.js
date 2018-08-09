@@ -3,7 +3,7 @@ export const demoVideoOptions = [
   {title: 'Sonatine (LOONA 1/3)', code: 'a6JmCdDs_GM'},
   {title: 'love (DEAN)', code: 'SkNB5AsgZOc'},
   {title: 'ViViD (Heejin)', code: '-FCYE87P5L0'}
-];
+]
 
 let demoCmts = [
   {
@@ -76,7 +76,7 @@ let demoCmts = [
     text: 'CHORDS',
     video_code: 'SkNB5AsgZOc'
   },
-];
+]
 demoCmts = demoCmts.sort((c1, c2) => c1.time > c2.time)
 
 export const demoComments = demoCmts
