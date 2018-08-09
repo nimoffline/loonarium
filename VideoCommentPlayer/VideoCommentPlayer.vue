@@ -1,7 +1,7 @@
 <template>
-<div class="orbit-helper container" :style="elementStyle">
+<div class="video-comment-player container" :style="elementStyle">
   <div class="row">
-    <div id="orbithelper-video" class="col-xs-12 col-md-8 col-lg-7 orbithelper-video">
+    <div id="video-comment-player-video" class="col-xs-12 col-md-8 col-lg-7 video-comment-player-video">
       <youtube
         player-width="100%"
         :player-height="playerHeight"
@@ -13,7 +13,7 @@
         @ready="playerReady"
       />
     </div>
-    <div id="orbithelper-comments" class="col-xs-12 col-md-4 col-lg-5 align-left orbithelper-comments">
+    <div id="video-comment-player-comments" class="col-xs-12 col-md-4 col-lg-5 align-left video-comment-player-comments">
       <ul>
         <label class="toggler">
           <input
@@ -61,7 +61,7 @@ import {
 const noop = (() => {})
 
 export default {
-  name: 'orbit-helper',
+  name: 'video-comment-player',
   components: { CommentComposer, CommentList },
   props: {
     commentNextPageBuffer: {
@@ -103,7 +103,6 @@ export default {
   },
   data () {
     return {
-      header: 'orbit-helper',
       interval: UPDATE_INTERVAL_PLAYING,
       playerHeight: 400,
       time: 0, // elapsed time in seconds (with decimals)
@@ -180,17 +179,17 @@ export default {
 </script>
 
 <style lang="scss">
-.orbit-helper {
+.video-comment-player {
   width: 100%;
   text-align: left;
   margin: 0 auto;
 }
 
-.orbithelper-comments {
+.video-comment-player-comments {
   text-align: left;
 }
 
-.orbithelper-video {
+.video-comment-player-video {
   text-align: center;
 }
 

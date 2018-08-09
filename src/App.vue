@@ -4,12 +4,18 @@
     <login-modal />
     <register-modal />
     <ul class="top-bar">
-      <li><h1>{{ header }}</h1></li>
+      <li><img class="logo" src="https://i.imgur.com/BaN9xkW.png" width="150"/><h1 class="logo-text">{{header}}</h1></li>
       <li class="login-info"><button class="btn" @click="showRegister" v-if="!isAuthed">Register</button></li>
       <li class="login-info"><button class="btn" @click="showLogin" v-if="!isAuthed">Log In</button></li>
       <li class="login-info"><button class="btn logout" @click="logout" v-if="isAuthed">Log out ({{username}})</button></li>
     </ul>
-    <h3 class="subheader">Annotated videos for Loonaverse deep dives</h3>
+    <section name="subheader" class="subheader-section">
+      <p class="subheader italics">
+      lu·nar·i·um: a device for illustrating the motion and phases of the moon <sup><a class="black" href="https://www.merriam-webster.com/dictionary/lunarium">[1]</a></sup>
+      </p>
+      <h3>Time-annotated videos for new LOOΠΔverse Orbits</h3>
+    </section>
+
     <hr/>
     <section class="center-block">
       <span>Select a Video</span>
@@ -22,7 +28,7 @@
     </section>
 
     <section>
-      <orbit-helper
+      <video-comment-player
         :video-code="currentVideo.code"
         :player-vars="{rel: 0}"
         :comments="videoComments"
@@ -44,7 +50,7 @@
       />
     </section>
     <footer id="footer">
-      <a href="https://github.com/choiryan/orbithelper">Github</a>
+      <a href="https://github.com/choiryan/loonarium/">Github</a>
       &nbsp;|&nbsp;
       <a href="https://loonaverse.github.io/">loonaverse.github.io</a>
       &nbsp;|&nbsp;
@@ -56,7 +62,7 @@
 </template>
 
 <script>
-import OrbitHelper from '../orbithelper/OrbitHelper.vue'
+import VideoCommentPlayer from '../VideoCommentPlayer/VideoCommentPlayer.vue'
 import LoginModal from './components/LoginModal.vue'
 import RegisterModal from './components/RegisterModal.vue'
 import usernameRegex from './constants/usernameRegex'
@@ -66,12 +72,12 @@ const noop = (() => {})
 const endTagOn = [9, 13, 32, 188]
 
 export default {
-  name: 'orbit-helper-demo',
-  components: { OrbitHelper, LoginModal, RegisterModal },
+  name: 'loonarium',
+  components: { VideoCommentPlayer, LoginModal, RegisterModal },
   data () {
     return {
       endTagOn,
-      header: 'orbit-helper',
+      header: 'LOOΠΔrium',
       noop,
       usernameRegex
     }
@@ -169,9 +175,6 @@ body {
   color: #2c3e50;
 }
 
-a {
-  color: #42b983;
-}
 
 footer {
   margin-top: 10px;
@@ -217,6 +220,18 @@ ul {
   }
 }
 
+.italics {
+  font-style: italic;
+}
+
+.subheader {
+  margin: 0;
+}
+
+.subheader-section {
+  margin: 0 12px;
+}
+
 .top-bar {
   display: inline-block;
   width: 100%;
@@ -231,6 +246,13 @@ ul {
 .login-info {
   margin-top: 1.2em;
   float: right !important;
+}
+
+.logo {
+  margin-top: 0.3em;
+}
+.logo-text {
+  margin-top: 0;
 }
 
 .video-picker {
