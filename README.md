@@ -1,6 +1,6 @@
-# orbit-helper
+# loonarium
 
-> Vue SPA concept for collaborative MV analysis on Youtube
+> Vue SPA concept for collaborative MV analysis on Youtube, demo site designed for the group LOOΠΔ.
 
 ![Demo GIF](https://thumbs.gfycat.com/LastMajorIcefish-size_restricted.gif)
 
@@ -23,7 +23,7 @@ For detailed explanation on how things work, consult the [docs for vue-loader](h
 ## Bring your own Backend
 
 ```
-<orbit-helper
+<video-comment-player
   :video-id="'youtubeVideoId'"
   :player-vars="{rel: 0}"
   :comments="[comment1, comment2, comment3, ...]"
