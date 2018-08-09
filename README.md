@@ -31,7 +31,7 @@ For detailed explanation on how things work, consult the [docs for vue-loader](h
   :totalCommentCount="233" /* How many comments are there in total for this video? */
 
   @commentDelete="(videoId, commentText) => {}" /* Comment deleted. Send DELETE to your server, etc. */
-  @commentEdit="commentId => {}" /* Comment edited by author. Send PATCH to your server, etc. */
+  @commentEdit="({comment, onSuccess}) => {}" /* Comment edited by author. Send PATCH to your server, etc. */
   @commentFetchNext="(videoId, lastPageId) => {}" /* Fetch next X comments for videoId after comment with ID lastPageId */
   @commentPost="(commentId, commentTime, commentText) => {}" /* Comment deleted by author. Send POST to your server, etc. */
 />

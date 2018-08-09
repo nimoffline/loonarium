@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import {
+  commentDelete,
+  commentEdit,
   commentPost,
   fetchVideoCommentsByPage,
   getUrl
@@ -21,7 +23,7 @@ const getters = {
     // 1:00 comment should show up above 0:59 comment
     return state.comments
       .filter(cmt => cmt && cmt.video_code === videoId)
-      .filter(cmt => !state.authorsToShow.size || (state.authorsToShow.has(cmt.author.toLowerCase())))
+      .filter(cmt => !state.authorsToShow.size || (state.authorsToShow.has(cmt.author_username.toLowerCase())))
   },
   nextPageUrl: state => {
     return state.paging.next
@@ -30,7 +32,7 @@ const getters = {
     return state.paging.count || 0
   },
   authorsToShow: state => {
-    return [...state.authorsToShow];
+    return [...state.authorsToShow]
   }
 }
 
@@ -49,10 +51,12 @@ const mutations = {
   EDIT_PAGING (state, paging={}) {
     state.paging = paging
   },
-  EDIT_COMMENT (state, commentId, message) {
-    [comment] = state.comments.filter(cmt => cmt.id === commentId)
-    if (comment) comment.message = message
-    state.comments = [...state.comments, comment]
+  EDIT_COMMENT (state, newComment={}) {
+    const [comment] = state.comments.filter(cmt => cmt.id === newComment.id)
+    state.comments = [
+      ...state.comments.filter(cmt => cmt.id !== newComment.id),
+      newComment
+    ]
   },
   DELETE_COMMENT (state, commentId) {
     state.comments = state.comments.filter(cmt => cmt.id !== commentId)
@@ -104,29 +108,54 @@ const actions = {
       })
       clearTextAreaFn()
     } catch (e) {
-      console.log(e)
-      Vue.notify({
-        group: 'base',
-        title: 'Failed to submit comment',
-        type: 'error'
-      })
+      if (e && e.response && e.response.status !== 0) {
+        Vue.notify({
+          group: 'base',
+          title: 'Failed to submit comment',
+          type: 'error'
+        })
+      }
     }
   },
   async delete ({ commit }, commentId) {
-    // delete comment user owns
-    Vue.notify({
-      group: 'base',
-      title: 'TODO delete comment',
-      type: 'error'
-    })
+    try {
+      await commentDelete(commentId)
+      commit('DELETE_COMMENT', commentId)
+      Vue.notify({
+        group: 'base',
+        title: 'Comment Deleted',
+        type: 'success'
+      })
+    } catch (e) {
+      if (e && e.response && e.response.status !== 0) {
+        Vue.notify({
+          group: 'base',
+          title: 'Failed to delete comment',
+          type: 'error'
+        })
+      }
+    }
   },
-  async edit ({ commit }, { commentId, time, text }) {
+  async edit ({ commit }, { comment, onSuccess}) {
     // edit comment (if logged in)
-    Vue.notify({
-      group: 'base',
-      title: 'TODO edit comment',
-      type: 'error'
-    })
+    try {
+      const newComment = await commentEdit(comment)
+      commit('EDIT_COMMENT', newComment)
+      onSuccess()
+      Vue.notify({
+        group: 'base',
+        title: 'Comment Edited',
+        type: 'success'
+      })
+    } catch (e) {
+      if (e && e.response && e.response.status !== 0) {
+        Vue.notify({
+          group: 'base',
+          title: 'Failed to edit comment',
+          type: 'error'
+        })
+      }
+    }
   }
 }
 
