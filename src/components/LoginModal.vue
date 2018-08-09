@@ -60,7 +60,7 @@ export default {
         type: 'error',
         title,
         text,
-      });
+      })
     },
     onSuccess (title, text) {
       this.$notify({
@@ -68,7 +68,7 @@ export default {
         type: 'success',
         title,
         text,
-      });
+      })
     }
   },
   created () {

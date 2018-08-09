@@ -23,8 +23,8 @@
           </form>
         </div>
         <div class="partition-text">
-          <p>Fields accept alphanumeric and underscore characters only:</p>
-          <p>A~Z a~z 0~9 _</p>
+          <p>15 characters or less</p>
+          <p>Fields accept alphanumeric and underscore characters only: A~Z a~z 0~9 _</p>
         </div>
       </div>
     </div>
@@ -66,7 +66,7 @@ export default {
         type: 'error',
         title,
         text,
-      });
+      })
     },
     onSuccess (title, text) {
       this.$notify({
@@ -74,7 +74,7 @@ export default {
         type: 'success',
         title,
         text,
-      });
+      })
     }
   },
   created () {

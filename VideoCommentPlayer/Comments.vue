@@ -3,7 +3,16 @@
     <h3 class="center center-block">Comments</h3>
     <div class="comment-list">
       <div v-for="c in visibleComments" :key="c.id" >
-        <comment :comment="c" :jumpToTime="jumpToTime"/>
+        <comment
+          :comment="c"
+          :currentUserId="currentUserId"
+          :jumpToTime="jumpToTime"
+          @commentDelete="handleCommentDelete"
+          @commentEdit="handleCommentEdit"
+          :editingCommentIdAdd="editingCommentIdAdd"
+          :editingCommentIdRemove="editingCommentIdRemove"
+          :time="elapsedSeconds"
+        />
       </div>
     </div>
   </div>
@@ -28,12 +37,16 @@ export default {
       type: Number,
       default: 5
     },
-    jumpToTime: Function,
-    totalCommentCount: {
+    currentUserId: {
+      type: String,
+      default: '',
+    },
+    elapsedSeconds: {
       type: Number,
       default: 0
     },
-    elapsedSeconds: {
+    jumpToTime: Function,
+    totalCommentCount: {
       type: Number,
       default: 0
     },
@@ -41,7 +54,8 @@ export default {
   },
   data () {
     return {
-      lastCommentCount: 0,
+      editingCommentIds: [],
+      lastCommentCount: 0
     }
   },
   computed: {
@@ -53,17 +67,34 @@ export default {
     },
     visibleComments () {
       const arr = this.comments
-      return arr.filter(cmt => this.elapsedSeconds >= cmt.time).sort((c1, c2) => c2.time - c1.time)
+      return arr
+        .filter(cmt => this.elapsedSeconds >= cmt.time
+          || this.editingCommentIds.indexOf(cmt.id) > -1)
+        .sort((c1, c2) => c2.time - c1.time)
     },
     visibleCommentCount () {
       return this.visibleComments.length
+    }
+  },
+  methods: {
+    handleCommentDelete (data) {
+      this.$emit('commentDelete', data)
+    },
+    handleCommentEdit (data) {
+      this.$emit('commentEdit', data)
+    },
+    editingCommentIdAdd (i) {
+      this.editingCommentIds.push(i)
+    },
+    editingCommentIdRemove (i) {
+      this.editingCommentIds = this.editingCommentIds.filter(cmtId => cmtId !== i)
     }
   },
   watch: {
     visibleCommentCount: {
       immediate: true, 
       handler (newCount, oldCount) {
-        if (newCount > oldCount) this.onShowNewComment();
+        if (newCount > oldCount) this.onShowNewComment()
         if (newCount === this.localCommentsLength - this.commentNextPageBuffer) {
           this.$emit('commentFetchNext')
         }
