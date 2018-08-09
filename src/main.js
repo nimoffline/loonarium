@@ -1,10 +1,10 @@
 import Vue from 'vue'
+import 'babel-polyfill'
 import InputTag from 'vue-input-tag'
 import VModal from 'vue-js-modal'
 import Notifications from 'vue-notification'
 import vSelect from 'vue-select'
 import VueYouTubeEmbed from 'vue-youtube-embed'
-
 
 import App from './App.vue'
 import store from './store'

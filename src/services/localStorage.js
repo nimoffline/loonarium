@@ -1,7 +1,7 @@
 import store from 'store'
 
-const AUTH_TOKEN = 'OrbitHelperAuthToken'
-const AUTH_USERNAME = 'OrbitHelperAuthUsername'
+const AUTH_TOKEN = 'LoonariumAuthToken'
+const AUTH_USERNAME = 'LoonariumAuthUsername'
 
 export function setAuth (username, token) {
   store.set(AUTH_TOKEN, token)

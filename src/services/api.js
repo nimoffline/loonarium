@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { API_URL, BASE_URL } from '../demo/constants'
+import Vue from 'vue'
 import {
   setAuth,
   unsetAuth,
@@ -10,6 +11,21 @@ const _axios = axios.create({
   baseURL: API_URL,
   withCredentials: true
 });
+
+_axios.interceptors.response.use(response => response, 
+  error => {
+    if (error.response && error.response.status === 429) {
+      if (Vue) {
+        Vue.notify({
+          group: 'base',
+          title: 'User rate limit reached - try again in an hour',
+          type: 'error'
+        })
+      } else alert('User rate limit reached - try again in an hour');
+    }
+  }
+);
+
 
 export async function getUrl (url) {
   const { data } = await _axios.get(url)
