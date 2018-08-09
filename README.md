@@ -8,7 +8,7 @@
 
 ``` bash
 # install dependencies
-npm install
+npm install  # or yarn
 
 # serve with hot reload at localhost:8080
 npm run dev
@@ -38,4 +38,4 @@ For detailed explanation on how things work, consult the [docs for vue-loader](h
 />
 ```
 
-You can check the expected format of the `comments` array in `src/demo/constants.js`.
+You can review the expected format of request data in `src/demo/constants.js`.
