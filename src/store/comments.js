@@ -136,7 +136,7 @@ const actions = {
       }
     }
   },
-  async edit ({ commit }, { comment, onSuccess}) {
+  async edit ({ commit }, { comment, onSuccess }) {
     // edit comment (if logged in)
     try {
       const newComment = await commentEdit(comment)
