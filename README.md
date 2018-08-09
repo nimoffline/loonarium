@@ -27,13 +27,14 @@ For detailed explanation on how things work, consult the [docs for vue-loader](h
   :video-id="'youtubeVideoId'"
   :player-vars="{rel: 0}"
   :comments="[comment1, comment2, comment3, ...]"
-  :commentNextPageBuffer="5" /* send commentFetchNext event when there are exactly 5 local comments left to be seen */
+  :commentNextPageBuffer="5" /* send commentFetchNext event when there are exactly 5 local comments left to be seen */   
+  :currentUserId="currentUserId" /* ID of authenticated user, for editing/deleting own comments */
   :totalCommentCount="233" /* How many comments are there in total for this video? */
 
-  @commentDelete="(videoId, commentText) => {}" /* Comment deleted. Send DELETE to your server, etc. */
-  @commentEdit="({comment, onSuccess}) => {}" /* Comment edited by author. Send PATCH to your server, etc. */
-  @commentFetchNext="(videoId, lastPageId) => {}" /* Fetch next X comments for videoId after comment with ID lastPageId */
-  @commentPost="(commentId, commentTime, commentText) => {}" /* Comment deleted by author. Send POST to your server, etc. */
+  @commentDelete="(commentId) => {}" /* Comment deleted. Send DELETE to your server, etc. */
+  @commentEdit="({ comment, onSuccess }) => {}" /* Comment edited by author. Send PATCH to your server, etc. */
+  @commentFetchNext="() => {}" /* Fetch next X comments for videoId after comment with ID lastPageId */
+  @commentPost="({ time, text, clearTextAreaFn }) => {}" /* Comment created. Send POST to your server, etc. */
 />
 ```
 
