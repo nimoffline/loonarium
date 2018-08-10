@@ -88,5 +88,5 @@ const demoCmts = [
   },
 ]
 
-export const API_URL = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:8000/api'
-export const BASE_URL = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:8000'
+export const API_URL = process.env.NODE_ENV === 'production' ? 'https://loonarium.com/api' : 'http://localhost:8000/api'
+export const BASE_URL = process.env.NODE_ENV === 'production' ? 'https://loonarium.com' : 'http://localhost:8000'
