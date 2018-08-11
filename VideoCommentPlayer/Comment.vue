@@ -51,7 +51,7 @@ export default {
     },
     commentText () {
       if (!this.comment) return ''
-      return this.comment.text
+      return this.comment.linkifiedText
     },
     commentTime () {
       if (!this.comment) return ''
@@ -91,6 +91,7 @@ export default {
     confirmEdit () {
       const onSuccess = () => {
         this.isEditing = false
+        this.editingCommentIdRemove(this.comment.id)
       }
       const data = {
         comment: {
@@ -170,6 +171,7 @@ export default {
 }
 
 .single-comment {
+  display: block;
   color: black;
   white-space: pre-wrap;
   -webkit-animation-duration: 0.7s;
