@@ -94,7 +94,7 @@ if (process.env.NODE_ENV === 'production') {
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: '"production"',
-        SERVER_URL: '"https://loonarium.com"'
+        SERVER_URL: '"https://api.loonarium.com"'
       }
     }),
     new webpack.optimize.UglifyJsPlugin({
