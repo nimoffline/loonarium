@@ -39,12 +39,12 @@ const getters = {
 // define the possible mutations that can be applied to our state
 const mutations = {
   ADD_COMMENT (state, comment) {
-    comment.text = linkify(comment.text.trim())
+    comment.linkifiedText = linkify(comment.text.trim())
     state.comments = uniq([...state.comments, comment], 'id')
   },
   ADD_COMMENTS (state, comments=[]) {
     comments.map(cmt => {
-      cmt.text = linkify(cmt.text.trim())
+      cmt.linkifiedText = linkify(cmt.text.trim())
     })
     state.comments = uniq([...state.comments, ...comments], 'id')
   },
@@ -52,6 +52,7 @@ const mutations = {
     state.paging = paging
   },
   EDIT_COMMENT (state, newComment={}) {
+    newComment.linkifiedText = linkify(newComment.text.trim())
     const [comment] = state.comments.filter(cmt => cmt.id === newComment.id)
     state.comments = [
       ...state.comments.filter(cmt => cmt.id !== newComment.id),

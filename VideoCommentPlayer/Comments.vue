@@ -2,18 +2,17 @@
   <div class="comment-list-div">
     <h3 class="center center-block">Comments</h3>
     <div class="comment-list">
-      <div v-for="c in visibleComments" :key="c.id" >
-        <comment
-          :comment="c"
-          :currentUserId="currentUserId"
-          :jumpToTime="jumpToTime"
-          @commentDelete="handleCommentDelete"
-          @commentEdit="handleCommentEdit"
-          :editingCommentIdAdd="editingCommentIdAdd"
-          :editingCommentIdRemove="editingCommentIdRemove"
-          :time="elapsedSeconds"
-        />
-      </div>
+      <comment
+        v-for="c in visibleComments" :key="c.id"
+        :comment="c"
+        :currentUserId="currentUserId"
+        :editingCommentIdAdd="editingCommentIdAdd"
+        :editingCommentIdRemove="editingCommentIdRemove"
+        :jumpToTime="jumpToTime"
+        :time="elapsedSeconds"
+        @commentDelete="handleCommentDelete"
+        @commentEdit="handleCommentEdit"
+      />
     </div>
   </div>
 </template>
@@ -110,8 +109,12 @@ export default {
 }
 .comment-list {
   text-align: left;
-  overflow-y: auto;
   overflow-wrap: break-word;
+  overflow-y: auto;
   min-height: 500px;
+  max-height: 1000px;
+  padding: 5px;
+  border-width: 5px;
+  border: 1px solid gray;
 }
 </style>

@@ -138,10 +138,12 @@ export default {
     },
     handleWindowResize () {
       if (window.innerWidth < 500) this.playerHeight = 300
-      else this.playerHeight = 400
+      else if (window.innerWidth < 770) this.playerHeight = 400
+      else if (window.innerWidth < 1000) this.playerHeight = 500
     },
     jumpTo (timeInSeconds) {
       // jump video to time (given in seconds, ex: 4.2157)
+      this.pausePlayer()
       this.player && this.player.seekTo(timeInSeconds)
     },
     pausePlayer () {

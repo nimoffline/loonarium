@@ -13,7 +13,7 @@
       <p class="subheader italics">
       lu·nar·i·um: a device for illustrating the motion and phases of the moon <sup><a class="black" href="https://www.merriam-webster.com/dictionary/lunarium">[1]</a></sup>
       </p>
-      <h3>Time-annotated videos for new LOOΠΔverse Orbits</h3>
+      <h3>Time-annotated videos for Orbits to collaborate</h3>
     </section>
 
     <hr/>
@@ -51,10 +51,12 @@
       />
     </section>
     <footer id="footer">
+      Personal
+      <a href="https://twitter.com/loonavrs_nim/">Twitter</a>
+      &nbsp;|&nbsp;
       <a href="https://github.com/choiryan/loonarium/">Github</a>
-      &nbsp;|&nbsp;
-      <a href="https://loonaverse.github.io/">loonaverse.github.io</a>
-      &nbsp;|&nbsp;
+      <strong>&nbsp;|&nbsp;</strong>
+      Official 
       <a href="https://www.google.com/search?q=loonatheworld.com">loonatheworld</a>
       &nbsp;|&nbsp;
       <a href="https://www.google.com/search?q=dlrowehtanool.com">dlrowehtanool</a>
@@ -181,7 +183,7 @@ body {
 
 
 footer {
-  margin-top: 10px;
+  margin: 10px;
 }
 
 h1 {
@@ -271,6 +273,7 @@ ul {
   border-radius: 5px !important;
   display: block;
   min-width: 360px;
+  max-width: 700px;
   width: 70%;
   margin-left: auto;
   margin-right: auto;
