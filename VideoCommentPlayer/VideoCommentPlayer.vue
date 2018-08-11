@@ -143,7 +143,7 @@ export default {
     },
     jumpTo (timeInSeconds) {
       // jump video to time (given in seconds, ex: 4.2157)
-      this.pausePlayer()
+      if (this.player.getPlayerState() !== 2) this.pausePlayer()
       this.player && this.player.seekTo(timeInSeconds)
     },
     pausePlayer () {
@@ -172,7 +172,7 @@ export default {
        */
       if (!this.player || this.timer) return
       this.timer = setInterval(() => {
-        this.time = this.player.getCurrentTime()
+        this.time = Math.round(this.player.getCurrentTime() * 20) / 20;
       }, this.interval)
     }
   },
