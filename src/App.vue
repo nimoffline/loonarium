@@ -272,7 +272,7 @@ ul {
   border: none !important;
   border-radius: 5px !important;
   display: block;
-  min-width: 360px;
+  min-width: 300px;
   max-width: 700px;
   width: 70%;
   margin-left: auto;
@@ -291,7 +291,7 @@ ul {
   border-radius: 5px !important;
   cursor: text;
   display: inline-block !important;
-  min-width: 360px;
+  min-width: 300px;
   overflow-x: hidden;
   overflow-y: auto;
   padding-left: 4px;
