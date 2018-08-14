@@ -37,7 +37,7 @@
 </template>
 <script>
 // from https://github.com/euvl/vue-js-modal/blob/master/demo/client_side_rendering/src/components/modals/DemoLoginModal.vue
-const MODAL_WIDTH = 328
+const MODAL_WIDTH = 320
 export default {
   name: 'RegisterModal',
   data () {
@@ -78,9 +78,7 @@ export default {
     }
   },
   created () {
-    this.modalWidth = window.innerWidth < MODAL_WIDTH
-      ? MODAL_WIDTH / 2
-      : MODAL_WIDTH
+    this.modalWidth = Math.min(window.innerWidth, MODAL_WIDTH)
   }
 }
 </script>
