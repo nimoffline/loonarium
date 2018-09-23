@@ -1,18 +1,21 @@
 <template>
   <div class="comment-list-div">
-    <h3 class="center center-block">Comments</h3>
-    <div class="comment-list">
+    <h3 class="center center-block">Comments ({{ totalCommentCount }})</h3>
+    <div class="comment-list" id="comment-list">
       <comment
-        v-for="c in visibleComments" :key="c.id"
+        v-for="c in comments"
+        :key="c.id"
+        :id="`cmt_${c.id}`"
         :comment="c"
         :currentUserId="currentUserId"
         :editingCommentIdAdd="editingCommentIdAdd"
         :editingCommentIdRemove="editingCommentIdRemove"
         :jumpToTime="jumpToTime"
-        :time="elapsedSeconds"
+        :passed="c.time < elapsedSeconds"
         @commentDelete="handleCommentDelete"
         @commentEdit="handleCommentEdit"
       />
+      <div class="empty-space"/>
     </div>
   </div>
 </template>
@@ -64,15 +67,14 @@ export default {
     localCommentsLength () {
       return this.comments.length
     },
-    visibleComments () {
+    passedComments () {
       const arr = this.comments
       return arr
         .filter(cmt => this.elapsedSeconds >= cmt.time
           || this.editingCommentIds.indexOf(cmt.id) > -1)
-        .sort((c1, c2) => c2.time - c1.time)
     },
-    visibleCommentCount () {
-      return this.visibleComments.length
+    passedCommentCount () {
+      return this.passedComments.length
     }
   },
   methods: {
@@ -90,13 +92,24 @@ export default {
     }
   },
   watch: {
-    visibleCommentCount: {
+    passedCommentCount: {
       immediate: true, 
       handler (newCount, oldCount) {
         if (newCount > oldCount) this.onShowNewComment()
         if (newCount === this.localCommentsLength - this.commentNextPageBuffer) {
           this.$emit('commentFetchNext')
         }
+      }
+    },
+    passedComments: {
+      handler (newCmts=[], oldCmts=[]) {
+        if (newCmts && oldCmts && newCmts.length === oldCmts.length) return
+        if (newCmts.length <= 2) return
+        const lastCmt = newCmts[this.passedComments.length - 2]
+        const cmtElement = document.getElementById(`cmt_${lastCmt.id}`)
+        if (!cmtElement) return
+        const topPos = cmtElement.offsetTop
+        document.getElementById('comment-list').scrollTop = topPos - 20
       }
     }
   }
@@ -116,5 +129,8 @@ export default {
   padding: 5px;
   border-width: 5px;
   border: 1px solid gray;
+}
+.empty-space {
+  height: 900px;
 }
 </style>

@@ -1,5 +1,8 @@
 <template>
-  <div class="single-comment fade-in" v-if="!!comment">
+  <div
+    @class="['single-comment', 'fade-in', passed ? 'full-opacity' : 'partial-opacity']"
+    v-if="!!comment"
+  >
     <strong>{{commentAuthor}} </strong><a href="#video-comment-player-video" class="gray" @click="jumpToComment">{{commentTime}}</a>
     <span class="no-select">&nbsp;</span>
     <span class="edit-start gray" v-if="canEdit && !isEditing" @click="startEditing">Edit</span>
@@ -36,7 +39,8 @@ export default {
     },
     jumpToTime: Function,
     editingCommentIdAdd: Function,
-    editingCommentIdRemove: Function
+    editingCommentIdRemove: Function,
+    passed: Boolean,
   },
   data () {
     return {
@@ -134,7 +138,7 @@ export default {
         this.jumpToTime(newTime)
       }
     }
-  }
+  },
 }
 </script>
 
@@ -193,5 +197,13 @@ span {
 
 .gray {
   color: gray;
+}
+
+.full-opacity {
+  opacity: 1.0;
+}
+
+.partial-opacity {
+  opacity: .6;
 }
 </style>
