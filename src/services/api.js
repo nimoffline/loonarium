@@ -33,6 +33,7 @@ _axios.interceptors.response.use(response => response,
         } else alert('Could not connect to server')
       }
     }
+    throw error
   }
 )
 
@@ -62,10 +63,15 @@ export async function login (username, password) {
 }
 
 export async function createUser (username, password, password2) {
-  const { data } = await _axios.post('/accounts/', { username, password, password2 })
-  _axios.defaults.headers.common['Authorization'] = `Token ${data.token}`
-  setAuth(username, data.token, data.id)
-  return data
+  try {
+    const { data } = await _axios.post('/accounts/', { username, password, password2 })
+    _axios.defaults.headers.common['Authorization'] = `Token ${data.token}`
+    setAuth(username, data.token, data.id)
+    return data
+  } catch (e) {
+    console.error(e)
+    throw e
+  }
 }
 
 export function logout () {
