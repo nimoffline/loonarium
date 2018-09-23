@@ -69,6 +69,12 @@ const actions = {
       commit('SET_CURRENT_VIDEO', video)
       setQueryParams({ v: video.id })
     }
+  },
+  addCommentToCurrentVideo (state) {
+    commit('ADD_COMMENT_TO_CURRENT_VIDEO')
+  },
+  removeCommentToCurrentVideo (state) {
+    commit('REMOVE_COMMENT_TO_CURRENT_VIDEO')
   }
 }
 

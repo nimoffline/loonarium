@@ -40,13 +40,16 @@ const getters = {
 const mutations = {
   ADD_COMMENT (state, comment) {
     comment.linkifiedText = linkify(comment.text.trim())
-    state.comments = uniq([...state.comments, comment], 'id')
+    state.paging.count += 1
+    state.comments = uniq([...state.comments, comment], 'id').sort(
+      (c1, c2) => c2.time === c1.time ? c2.id < c1.id : c1.time - c2.time)
   },
   ADD_COMMENTS (state, comments=[]) {
     comments.map(cmt => {
       cmt.linkifiedText = linkify(cmt.text.trim())
     })
-    state.comments = uniq([...state.comments, ...comments], 'id')
+    state.comments = uniq([...state.comments, ...comments], 'id').sort(
+      (c1, c2) => c2.time === c1.time ? c2.id < c1.id : c1.time - c2.time)
   },
   EDIT_PAGING (state, paging={}) {
     state.paging = paging
@@ -57,10 +60,11 @@ const mutations = {
     state.comments = [
       ...state.comments.filter(cmt => cmt.id !== newComment.id),
       newComment
-    ]
+    ].sort((c1, c2) => c2.time === c1.time ? c2.id < c1.id : c1.time - c2.time)
   },
   DELETE_COMMENT (state, commentId) {
     state.comments = state.comments.filter(cmt => cmt.id !== commentId)
+    state.paging.count -= 1
   },
   SET_AUTHORS_TO_SHOW (state, usernames) {
     if (usernames) {
@@ -87,7 +91,7 @@ const actions = {
       commit('ADD_COMMENTS', paging.results)
     }
   },
-  async post ({ commit, rootGetters }, { code, time, text, clearTextAreaFn }) {
+  async post ({ commit, rootDispatch, rootGetters }, { code, time, text, clearTextAreaFn }) {
     if (!code || !text) return
     if (!rootGetters['auth/isAuthed']) {
       Vue.notify({
@@ -102,6 +106,7 @@ const actions = {
     try {
       const data = await commentPost({ code, time, text })
       commit('ADD_COMMENT', data)
+      rootDispatch('videos/addCommentToCurrentVideo')
       Vue.notify({
         group: 'base',
         title: 'Comment Submitted',
@@ -122,6 +127,7 @@ const actions = {
     try {
       await commentDelete(commentId)
       commit('DELETE_COMMENT', commentId)
+      rootDispatch('videos/removeCommentToCurrentVideo')
       Vue.notify({
         group: 'base',
         title: 'Comment Deleted',
