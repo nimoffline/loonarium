@@ -41,6 +41,12 @@ const mutations = {
       ...state.videoOptions,
       ...videos
     ], 'code')
+  },
+  ADD_COMMENT_TO_CURRENT_VIDEO (state) {
+    state.currentVideo.comment_count += 1
+  },
+  REMOVE_COMMENT_TO_CURRENT_VIDEO (state) {
+    state.currentVideo.comment_count -= 1
   }
 }
 
@@ -49,7 +55,7 @@ const actions = {
     const videos = await fetchVideos(page)
     commit('SET_VIDEO_OPTIONS', videos.results)
     videos.results.forEach(video => {
-      video.title = video.title.trim()
+      video.title = `(${video.comment_count} notes) ` + video.title.trim()
     })
     if (!isNaN(preselect)) {
       commit('SET_CURRENT_VIDEO_BY_ID', preselect)

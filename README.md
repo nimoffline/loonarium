@@ -1,6 +1,8 @@
 # loonarium
 
-> Vue SPA concept for collaborative MV analysis on Youtube, demo site designed for the group LOOΠΔ.
+lunarium (noun): a device for illustrating the motion and phases of the moon.
+
+> Vue SPA concept for collaborative MV analysis on Youtube, demo site designed for the K-pop group LOOΠΔ. This group was selected due to its relatively large library of music videos.
 
 ![Demo GIF](https://thumbs.gfycat.com/LastMajorIcefish-size_restricted.gif)
 
@@ -33,7 +35,7 @@ For detailed explanation on how things work, consult the [docs for vue-loader](h
 
   @commentDelete="(commentId) => {}" /* Comment deleted. Send DELETE to your server, etc. */
   @commentEdit="({ comment, onSuccess }) => {}" /* Comment edited by author. Send PATCH to your server, etc. */
-  @commentFetchNext="() => {}" /* Fetch next X comments for videoId after comment with ID lastPageId */
+  @commentFetchNext="() => {}" /* Fetch next X comments for currently selected video with ID videoId, after comment with ID lastPageId */
   @commentPost="({ time, text, clearTextAreaFn }) => {}" /* Comment created. Send POST to your server, etc. */
 />
 ```
