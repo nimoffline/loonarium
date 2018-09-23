@@ -55,7 +55,7 @@ const actions = {
     const videos = await fetchVideos(page)
     commit('SET_VIDEO_OPTIONS', videos.results)
     videos.results.forEach(video => {
-      video.title = `(${video.comment_count} notes) ` + video.title.trim()
+      video.title = `(Notes: ${video.comment_count}) ` + video.title.trim()
     })
     if (!isNaN(preselect)) {
       commit('SET_CURRENT_VIDEO_BY_ID', preselect)
