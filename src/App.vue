@@ -24,7 +24,18 @@
         label="title"
         v-model="currentVideo"
         :options="videoOptions"
-      />
+      >
+        <template slot="option" slot-scope="option">
+          <!-- Not teaser, notes: 0 -->
+          <span v-if="option.title.indexOf('(Notes: 0)') === 0">
+            {{ option.title }}
+          </span>
+          <!-- Not teaser, notes: >0 -->
+          <span v-if="option.title.indexOf('(Notes: 0)') === -1" class="bold-title">
+            {{ option.title }}
+          </span>
+         </template>
+      </v-select>
     </section>
 
     <section>
@@ -32,7 +43,7 @@
         :video-code="currentVideo.code"
         :player-vars="{rel: 0}"
         :comments="videoComments"
-        :commentNextPageBuffer="10"
+        :commentNextPageBuffer="20"
         :currentUserId="currentUserId"
         :totalCommentCount="currentVideoTotalCommentCount"
         @commentDelete="handleCommentDelete"
@@ -217,6 +228,10 @@ ul {
           padding-start: 0;
 }
 
+.bold-title {
+  font-weight: bold !important;
+}
+
 .btn {
   border: none;
   border-radius: 5px;
@@ -224,6 +239,10 @@ ul {
   &:hover {
     background-color: #cde69c !important;
   }
+}
+
+.gray-title {
+  color: gray;
 }
 
 .italics {
