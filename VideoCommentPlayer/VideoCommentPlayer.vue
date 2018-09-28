@@ -137,9 +137,8 @@ export default {
       this.$emit('commentPost', { time, text, clearTextAreaFn })
     },
     handleWindowResize () {
-      if (window.innerWidth < 500) this.playerHeight = 300
-      else if (window.innerWidth < 770) this.playerHeight = 400
-      else if (window.innerWidth < 1000) this.playerHeight = 500
+      if (window.innerWidth < 992) this.playerHeight = 300
+      else this.playerHeight = 800
     },
     jumpTo (timeInSeconds) {
       // jump video to time (given in seconds, ex: 4.2157)

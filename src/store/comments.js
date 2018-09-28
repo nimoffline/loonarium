@@ -91,7 +91,7 @@ const actions = {
       commit('ADD_COMMENTS', paging.results)
     }
   },
-  async post ({ commit, rootDispatch, rootGetters }, { code, time, text, clearTextAreaFn }) {
+  async post ({ commit, dispatch, rootGetters }, { code, time, text, clearTextAreaFn }) {
     if (!code || !text) return
     if (!rootGetters['auth/isAuthed']) {
       Vue.notify({
@@ -102,11 +102,9 @@ const actions = {
       return
     }
     text = text.trim()
-
     try {
       const data = await commentPost({ code, time, text })
       commit('ADD_COMMENT', data)
-      rootDispatch('videos/addCommentToCurrentVideo')
       Vue.notify({
         group: 'base',
         title: 'Comment Submitted',
