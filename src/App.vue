@@ -63,7 +63,7 @@
     </section>
     <footer id="footer">
       Personal
-      <a href="https://twitter.com/loonavrs_nim/">Twitter</a>
+      <a href="https://twitter.com/orrery_nim/">Twitter</a>
       &nbsp;|&nbsp;
       <a href="https://github.com/choiryan/loonarium/">Github</a>
       <strong>&nbsp;|&nbsp;</strong>
