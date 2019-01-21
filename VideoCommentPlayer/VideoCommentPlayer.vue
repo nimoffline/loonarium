@@ -8,6 +8,7 @@
         :player-height="playerHeight"
         :video-id="videoCode"
         :player-vars="playerVars"
+        ref="player"
         @ended="playerEnded"
         @paused="playerPaused"
         @playing="playerPlaying"
@@ -15,38 +16,20 @@
       />
     </div>
     <div id="video-comment-player-comments" class="col-xs-12 col-md-4 col-lg-5 align-left video-comment-player-comments">
-      <ul>
-        <label class="toggler">
-          <input
-            v-model="shouldPauseOnNewComment"
-            type="checkbox"/>
-            Pause on Comment
-        </label> &nbsp;
-        <label class="toggler">
-          <input
-            v-model="shouldShowComposer"
-            type="checkbox"/>
-            Comment Box
-        </label>
-      </ul>
-      <comment-composer
-        v-show="shouldShowComposer"
-        :elapsedSeconds="time"
-        @post="commentPost"
-      />
-      <hr/>
-      <comment-list
+      <comments
         :comments="comments"
         :commentNextPageBuffer="commentNextPageBuffer"
         :currentUserId="currentUserId"
         :elapsedSeconds="time"
-        :onShowNewComment="newCommentPauseFn"
+        :onShowNewComment="pausePlayer"
         :style="commentListStyle"
         :jumpToTime="jumpTo"
         :totalCommentCount="totalCommentCount"
+        :height="playerHeight"
         @commentFetchNext="commentFetchNext"
         @commentEdit="commentEdit"
         @commentDelete="commentDelete"
+        @commentPost="commentPost"
       />
     </div>
   </div>
@@ -55,16 +38,15 @@
 
 <script>
 import CommentComposer from './CommentComposer.vue'
-import CommentList from './Comments.vue'
+import Comments from './Comments.vue'
 import {
   UPDATE_INTERVAL_PAUSED,
   UPDATE_INTERVAL_PLAYING
 } from './constants/numbers'
-const noop = (() => {})
 
 export default {
   name: 'video-comment-player',
-  components: { CommentComposer, CommentList },
+  components: { CommentComposer, Comments },
   props: {
     commentNextPageBuffer: {
       type: Number,
@@ -113,14 +95,7 @@ export default {
       playerHeight: 400,
       time: 0, // elapsed time in seconds (with decimals)
       timer: null,
-      shouldPauseOnNewComment: false,
-      shouldShowComposer: false,
       visibleCommentCount: 0
-    }
-  },
-  computed: {
-    newCommentPauseFn () {
-      return this.shouldPauseOnNewComment ? this.pausePlayer : noop
     }
   },
   methods: {    
@@ -158,6 +133,7 @@ export default {
     playerReady (event) {
       /* Received player event: Youtuber player is ready */
       this.player = event.target
+      this.handleWindowResize();
     },
     resetTimer () {
       /* Clears timer */
@@ -198,10 +174,15 @@ export default {
 
 .video-comment-player-comments {
   text-align: left;
+  padding: 0;
 }
 
 .video-comment-player-video {
   text-align: center;
+  padding: 0;
+  border: 2px solid white;
+  border-radius: 10px;
+  overflow: hidden;
 }
 
 .toggler {
@@ -212,5 +193,8 @@ export default {
          -ms-user-select: none; /* Internet Explorer/Edge */
              user-select: none; /* Non-prefixed version, currently
                                    supported by Chrome and Opera */
+}
+.row {
+  padding: 30px 40px;
 }
 </style>

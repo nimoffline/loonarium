@@ -57,13 +57,29 @@ export default {
 <style lang="scss">
 .comment-composer {
   color: black;
+  position: relative;
+  background: #050F1B;
+  right: 25px;
+  left: 25px;
+  z-index: 2;
 }
 
 .composer-textarea {
-  width: 100%;
+  width: calc(100% - 25px);
+  padding: 12px 15px;
+  background: transparent;
+  border: 1px solid white;
+  border-radius: 20px;
+  color: white;
+  resize: vertical;
 }
 
 .composer-button {
   font-size: 14px;
+  position: absolute;
+  bottom: 10px;
+  right: 33px;
+  border-radius: 20px;
+  padding: 6px 10px 5px;
 }
 </style>

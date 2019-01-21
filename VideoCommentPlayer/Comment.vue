@@ -1,26 +1,24 @@
 <template>
-  <div
-    @class="['single-comment', 'fade-in', passed ? 'full-opacity' : 'partial-opacity']"
+  <li
+    :class="['single-comment', 'fade-in', highlighted ? 'highlighted' : '']"
     v-if="!!comment"
+    :style="{opacity}"
   >
-    <strong>{{commentAuthor}} </strong><a href="#video-comment-player-video" class="gray" @click="jumpToComment">{{commentTime}}</a>
+    <span class="author">{{commentAuthor}} </span><a href="#video-comment-player-video" class="timestamp" @click="jumpToComment">{{commentTime}}</a>
     <span class="no-select">&nbsp;</span>
     <span class="edit-start gray" v-if="canEdit && !isEditing" @click="startEditing">Edit</span>
     <span class="edit-start gray" v-if="isEditing" @click="cancelEditing">Cancel</span>
     <span class="no-select" v-if="isEditing">&nbsp;</span>
     <span class="edit-start gray" v-if="isEditing" @click="deleteComment">Delete</span>
-
-    <br/>
-    <span v-if="!isEditing" v-html="commentText"></span>
-    <div v-if="isEditing">
+    <p v-if="!isEditing" v-html="commentText"></p><!--
+    --><div v-if="isEditing">
       <input name="editor-time" class="editor-time" type="number" step="0.05" v-model="newCommentTime" min="0">
       <label for="editor-time">Time (sec.)</label>
       <textarea class="editor-text" rows="4" v-model="newCommentText"/>
       <br/>
       <button class="btn editor-save" @click="confirmEdit">Save</button>
     </div>
-    <hr/>
-  </div>
+  </li>
 </template>
 
 <script>
@@ -40,7 +38,8 @@ export default {
     jumpToTime: Function,
     editingCommentIdAdd: Function,
     editingCommentIdRemove: Function,
-    passed: Boolean,
+    highlighted: Boolean,
+    opacity: Number
   },
   data () {
     return {
@@ -165,7 +164,7 @@ export default {
   user-select: none;
 
   &:hover {
-    color: blue;
+    color: #ff8d39;
   }  
 }
 
@@ -176,10 +175,49 @@ export default {
 
 .single-comment {
   display: block;
-  color: black;
   white-space: pre-wrap;
   -webkit-animation-duration: 0.7s;
           animation-duration: 0.7s;
+  padding: 13px 25px;
+  margin: 0;
+  transition: .15s opacity;
+
+  &:hover {
+    opacity: 1 !important;
+  }
+
+  p {
+    margin: 5px 0;
+    font-size: 15px;
+  }
+
+  .timestamp {
+    font-weight: 300;
+    color: #2DC896;
+    font-size: 16px;
+    margin-left: 5px;
+    opacity: .8;
+    font-weight: 400;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  .author {
+    font-size: 17px;
+    font-weight: 800;
+  }
+
+  &.highlighted {
+    opacity: 1;
+    background: white;
+    color: black;
+
+    .timestamp {
+      color: black;
+    }
+  }
 }
 
 span {
@@ -189,14 +227,20 @@ span {
 .editor-time {
   margin: 4px 0;
   width: 70px;
+  background: transparent;
 }
 
 .editor-text {
   width: 100%;
+  background: transparent;
 }
 
-.gray {
-  color: gray;
+.editor-save {
+  padding: 5px 15px;
+  background: #2DC896;
+  color: white;
+  border-radius: 20px;
+  margin-left: calc(100% - 60px);
 }
 
 .full-opacity {
