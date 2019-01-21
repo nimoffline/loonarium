@@ -3,20 +3,20 @@
     <notifications group="base" position="top left" />
     <login-modal />
     <register-modal />
-    <ul class="top-bar">
-      <li><img class="logo" src="https://i.imgur.com/BaN9xkW.png" width="150"/><h1 class="logo-text">{{header}}</h1></li>
-      <li class="login-info"><button class="btn" @click="showRegister" v-if="!isAuthed">Register</button></li>
-      <li class="login-info"><button class="btn" @click="showLogin" v-if="!isAuthed">Log In</button></li>
-      <li class="login-info"><button class="btn logout" @click="logout" v-if="isAuthed">Log out ({{username}})</button></li>
-    </ul>
+    <header class="logo-text">
+      <h1>{{header}}</h1>
+      <ul class="top-bar">
+        <li><button @click="showRegister" v-if="!isAuthed">Register</button></li>
+        <li><button @click="showLogin" v-if="!isAuthed">Log In</button></li>
+        <li><button @click="logout" v-if="isAuthed">Log out ({{username}})</button></li>
+      </ul>
+    </header>
     <section name="subheader" class="subheader-section">
       <p class="subheader italics">
       lu·nar·i·um: a device for illustrating the motion and phases of the moon <sup><a class="black" href="https://www.merriam-webster.com/dictionary/lunarium">[1]</a></sup>
       </p>
       <h3>Time-annotated videos for Orbits to collaborate</h3>
     </section>
-
-    <hr/>
     <section class="center-block">
       <span>Select a Video</span>
       <v-select
@@ -41,7 +41,7 @@
     <section>
       <video-comment-player
         :video-code="currentVideo.code"
-        :player-vars="{rel: 0}"
+        :player-vars="{rel: 0, color: 'white', fs: 0}"
         :comments="videoComments"
         :commentNextPageBuffer="20"
         :currentUserId="currentUserId"
@@ -181,15 +181,19 @@ export default {
 @import "./assets/normalize.css";
 @import "./assets/bootstrap.css";
 body {
-  background-color: lightgray;
+  background: linear-gradient(#0B1626, #000810);
 }
 
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: 'Roboto', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: white;
+}
+
+.vue-dialog {
+  color: black;
 }
 
 
@@ -228,6 +232,10 @@ ul {
           padding-start: 0;
 }
 
+a {
+  color: #2DC896;
+}
+
 .bold-title {
   font-weight: bold !important;
 }
@@ -237,7 +245,8 @@ ul {
   border-radius: 5px;
   font-size: 16px;
   &:hover {
-    background-color: #cde69c !important;
+    background-color: #2DC896 !important;
+    color: white;
   }
 }
 
@@ -253,33 +262,129 @@ ul {
   user-select: none;
 }
 
+.toggler {
+  label {
+    cursor: pointer;
+  }
+
+  input {
+    display: none;
+
+    &:checked + label::before {
+      background: #ff8d39;
+      border-color: #ff8d39;
+    }
+  }
+
+  label::before {
+    content: "";
+    display: inline-block;
+    width: 11px;
+    height: 11px;
+    border: 1px solid white;
+    border-radius: 2px;
+    margin-right: 4px;
+  }
+}
+
+header {
+  position: relative;
+  background: white;
+  padding: 30px 0 15px;
+}
+
+header::after {
+  content: "";
+  display: block;
+  position: absolute;
+  height: 23px;
+  width: 100%;
+  bottom: -23px;
+  background: url("https://i.imgur.com/WvmhYm9.png") no-repeat center center;
+}
+
+header h1 {
+  width: 150px;
+  height: 85px;
+  background: url("https://i.imgur.com/y6sMjD6.png") no-repeat center center;
+  background-size: contain;
+  font-size: 0;
+  margin: 0 auto;
+}
+
 .subheader {
   margin: 0;
 }
 
 .subheader-section {
-  margin: 0 12px;
-}
+  padding: 70px 12px 50px;
+  position: relative;
 
-.top-bar {
-  display: inline-block;
-  width: 100%;
-  padding: 0;
-  margin: 0;
-  user-select: none;
-  li {
-    float: left;
+  p {
+    opacity: .7;
+    margin-bottom: 3px;
+  }
+
+  p, h3 {
+    font-weight: 300;
+  }
+
+  &::after {
+    content: "";
     display: block;
+    position: absolute;
+    left: calc(50% - 3px);
+    bottom: -3px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: white;
   }
 }
 
-.login-info {
-  margin-top: 1.2em;
-  float: right !important;
+.top-bar {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  padding: 0 20px 0;
+  margin: 0;
+  user-select: none;
+  text-align: right;
+
+  button {
+    background: transparent;
+    padding: 3px 0;
+    color: black;
+
+    &::after {
+      content: "";
+      display: inline-block;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #2DC896;
+      margin-left: 8px;
+    }
+
+    &:hover::after {
+      background: #ff8d39;
+    }
+  }
 }
 
-.logo {
-  margin-top: 0.3em;
+#app > .center-block {
+  padding: 45px 12px 20px;
+
+  > span {
+    display: block;
+    font-size: 30px;
+    font-weight: 200;
+    margin-bottom: 20px;
+  }
 }
 
 .logo-text {
@@ -287,38 +392,108 @@ ul {
 }
 
 .video-picker {
-  background-color: white;
-  border: none !important;
-  border-radius: 5px !important;
+  border: 2px solid white;
+  border-radius: 30px !important;
   display: block;
   min-width: 300px;
   max-width: 700px;
-  width: 70%;
+  width: 73%;
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 10px;
   text-align: left;
+  padding: 5px 10px;
   .li {
     margin-bottom: 10px;
   }
 }
 
+.video-picker .dropdown-toggle {
+  border: 0;
+
+  .clear {
+    margin: 0 8px 1px 0;
+    color: white;
+  }
+
+  .open-indicator{
+    margin: 0 5px 3px 0;
+  }
+  .open-indicator::before {
+    border-color: white;
+  }
+}
+
+.video-picker .dropdown-menu {
+  background: #0B1626;
+
+  li {
+    margin: 0;
+
+    a {
+      padding: 8px;
+      color: white;
+    }
+
+    &.active a {
+      background: transparent;
+      color: #2DC896;
+    }
+
+    &.highlight:not(.active) a {
+      color: #000;
+      background-color: #ff8d39;
+    }
+
+    &.highlight.active a {
+      background-color: transparent;
+    }
+
+    .bold-title {
+      font-weight: 300 !important;
+    }
+
+    a span:not(.bold-title) {
+      opacity: .6;
+    }
+  }
+}
+
+.video-picker .selected-tag {
+  color: #fff;
+  font-weight: 400;
+}
+
 .vue-input-tag-wrapper {
   -webkit-appearance: textfield;
-  background-color: white;
-  border: none !important;
-  border-radius: 5px !important;
+  background: transparent !important;
+  border: 1px solid rgba(79, 99, 134, 0.5) !important;
+  border-radius: 20px !important;
   cursor: text;
   display: inline-block !important;
   min-width: 300px;
   overflow-x: hidden;
   overflow-y: auto;
-  padding-left: 4px;
+  padding-left: 5px !important;
   padding-top: 0px;
   padding-bottom: 0px;
-  padding-right: 0px;
+  padding-right: 5px !important;
   width: 70%;
+  margin: 10px 0 30px !important;
+
+  .input-tag {
+    border-radius: 20px !important;
+    background: #ff8d39 !important;
+    border: 0 !important;
+    color: black !important;
+    padding: 5px 10px !important;
+
+    .remove {
+      color: black !important;
+    }
+  }
 }
+
 
 .new-tag {
   width: 100% !important;
@@ -331,6 +506,6 @@ ul {
   outline: none;
   border: none !important;
   padding: 4px;
-  padding-left: 0 !important;
+  padding-left: 10px !important;
 }
 </style>

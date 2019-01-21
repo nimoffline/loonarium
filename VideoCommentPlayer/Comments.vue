@@ -1,9 +1,52 @@
 <template>
   <div class="comment-list-div">
-    <h3 class="center center-block">Comments ({{ totalCommentCount }})</h3>
-    <div class="comment-list" id="comment-list">
+    <div class="comments-titlebar">
+      <h3 class="center center-block">Comments ({{ totalCommentCount }})</h3>
+      <ul>
+        <li class="toggler">
+          <input
+            id="cbx-pause-on-comment"
+            v-model="shouldPauseOnNewComment"
+            type="checkbox"/>
+          <label
+            for="cbx-pause-on-comment">
+            Pause on Comment
+          </label>
+        </li> &nbsp;
+        <li class="toggler">
+          <input
+            id="cbx-autoscroll"
+            v-model="shouldAutoScroll"
+            type="checkbox"/>
+          <label
+            for="cbx-autoscroll">
+            Auto-scroll
+          </label>
+        </li> &nbsp;
+        <li class="toggler">
+          <input
+            id="cbx-show-composer"
+            v-model="shouldShowComposer"
+            type="checkbox"/>
+          <label
+            for="cbx-show-composer">
+            Comment Box
+          </label>
+        </li>
+      </ul>
+    </div>
+    <comment-composer
+      v-show="shouldShowComposer"
+      :elapsedSeconds="elapsedSeconds"
+      @post="commentPost"
+    />
+    <ol
+      class="comment-list"
+      id="comment-list"
+      :style="{height: (height - 60) + 'px'}"
+      ref="list">
       <comment
-        v-for="c in comments"
+        v-for="(c, i) in comments"
         :key="c.id"
         :id="`cmt_${c.id}`"
         :comment="c"
@@ -11,24 +54,25 @@
         :editingCommentIdAdd="editingCommentIdAdd"
         :editingCommentIdRemove="editingCommentIdRemove"
         :jumpToTime="jumpToTime"
-        :passed="c.time < elapsedSeconds"
-        @commentDelete="handleCommentDelete"
-        @commentEdit="handleCommentEdit"
+        :opacity="getOpacity(i)"
+        :highlighted="c.id === currentCmt.id"
+        @commentDelete="commentDelete"
+        @commentEdit="commentEdit"
+        @commentFetchNext="commentFetchNext"
       />
       <div class="empty-space"/>
-    </div>
+    </ol>
   </div>
 </template>
 
 <script>
+import CommentComposer from './CommentComposer.vue'
 import Comment from './Comment.vue'
 
 export default {
-  name: 'comment-list',
-  components: { Comment },
+  name: 'comments',
+  components: { Comment, CommentComposer },
   props: {
-    commentDelete: Function,
-    commentEdit: Function,
     comments: {
       type: Array,
       default () {
@@ -52,12 +96,17 @@ export default {
       type: Number,
       default: 0
     },
-    onShowNewComment: Function
+    onShowNewComment: Function,
+    height: Number
   },
   data () {
     return {
       editingCommentIds: [],
-      lastCommentCount: 0
+      lastCommentCount: 0,
+      shouldPauseOnNewComment: false,
+      shouldShowComposer: false,
+      shouldAutoScroll: true,
+      currentCmt: {id: null, index: null} 
     }
   },
   computed: {
@@ -78,24 +127,57 @@ export default {
     }
   },
   methods: {
-    handleCommentDelete (data) {
-      this.$emit('commentDelete', data)
-    },
-    handleCommentEdit (data) {
-      this.$emit('commentEdit', data)
-    },
     editingCommentIdAdd (i) {
       this.editingCommentIds.push(i)
     },
     editingCommentIdRemove (i) {
       this.editingCommentIds = this.editingCommentIds.filter(cmtId => cmtId !== i)
+    },
+    commentPost ({ time, text, clearTextAreaFn }) {
+      this.$emit('commentPost', { time, text, clearTextAreaFn })
+    },
+    commentDelete (commentId) {
+      this.$emit('commentDelete', commentId)
+    },
+    commentEdit ({ comment, onSuccess }) {
+      this.$emit('commentEdit', { comment, onSuccess })
+    },
+    commentFetchNext () {
+      this.$emit('commentFetchNext')
+    },
+    getOpacity (index) {
+      if (!this.currentCmt.index || this.currentCmt.index === index) return 1
+      const diff = Math.abs(this.currentCmt.index - index)
+      switch (diff) {
+        case 1: return .7
+        case 2: return .4
+        default: return .2
+      }
+    },
+    getScrollValue () {
+      const {offsetHeight, offsetTop} = this.$children[this.currentCmt.index + 1].$el
+      const scrollValue = this.height > 300
+        ? -(this.height / 2 - offsetHeight / 2) + offsetTop
+        : offsetTop
+      return Math.max(0, scrollValue);
+    },
+    scrollTo (value) {
+      let current = this.$refs.list.scrollTop
+      const backwards = current > value;
+      const distance = Math.abs(current - value);
+      let ratio = distance * 16 / 250;
+      const interval = setInterval(() => {
+        current = backwards ? current - ratio : current + ratio
+        this.$refs.list.scrollTop = current
+        if (backwards && current <= value || !backwards && current >= value) clearInterval(interval)
+      }, 16);
     }
   },
   watch: {
     passedCommentCount: {
       immediate: true, 
       handler (newCount, oldCount) {
-        if (newCount > oldCount) this.onShowNewComment()
+        if (newCount > oldCount) this.shouldPauseOnNewComment && this.onShowNewComment()
         if (newCount === this.localCommentsLength - this.commentNextPageBuffer) {
           this.$emit('commentFetchNext')
         }
@@ -104,14 +186,26 @@ export default {
     passedComments: {
       handler (newCmts=[], oldCmts=[]) {
         if (newCmts && oldCmts && newCmts.length === oldCmts.length) return
-        if (newCmts.length <= 2) return
-        const lastCmt = newCmts[this.passedComments.length - 2]
-        const cmtElement = document.getElementById(`cmt_${lastCmt.id}`)
-        if (!cmtElement) return
-        const topPos = cmtElement.offsetTop
-        document.getElementById('comment-list').scrollTop = topPos - 20
+        const index = this.passedComments.length - 1
+        if (!newCmts[index]) return
+        this.currentCmt = {
+          id: newCmts[index].id,
+          index
+        }
+        const scrollValue = this.getScrollValue();
+        if (this.shouldAutoScroll) this.scrollTo(scrollValue)
+      }
+    },
+    shouldAutoScroll: {
+      handler (isTrue) {
+        if (isTrue) this.scrollTo(this.getScrollValue());
       }
     }
+  },
+  mounted () {
+    this.$refs.list.addEventListener('wheel', () => {
+      this.shouldAutoScroll = false
+    })
   }
 }
 </script>
@@ -120,16 +214,47 @@ export default {
 .comment-list-div {
   margin: 5px 0;
 }
+.comments-titlebar {
+  margin: 15px 0 15px 25px;
+  display: flex;
+  flex-wrap: wrap;
+  
+  ul {
+    padding: 0;
+    margin: 3px 0 0;
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  h3 {
+    font-size: 20px;
+    font-weight: 500;
+    flex-grow: 1;
+    display: inline-block;
+    margin-right: 10px;
+  }
+
+  li {
+    margin: 0;
+  }
+  
+  li:not(:last-child) {
+    margin: 0 10px 0 0;
+  }
+}
 .comment-list {
   text-align: left;
+  position: relative;
   overflow-wrap: break-word;
   overflow-y: auto;
   min-height: 500px;
   max-height: 1000px;
-  padding: 5px;
+  padding: 0;
   border-width: 5px;
-  border: 1px solid gray;
+  margin-top: 20px;
 }
+
 .empty-space {
   height: 900px;
 }
