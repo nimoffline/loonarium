@@ -8,7 +8,7 @@
       <ul class="top-bar">
         <li><button @click="showRegister" v-if="!isAuthed">Register</button></li>
         <li><button @click="showLogin" v-if="!isAuthed">Log In</button></li>
-        <li><button @click="logout" v-if="isAuthed">Log out ({{username}})</button></li>
+        <li><p class="logout-username">{{username}}</p><button @click="logout" v-if="isAuthed">Log out</button></li>
       </ul>
     </header>
     <section name="subheader" class="subheader-section">
@@ -391,6 +391,12 @@ header h1 {
   margin-top: 0;
 }
 
+.logout-username {
+  margin-right: 14px;
+  margin-bottom: 0;
+  color: #25B398;
+}
+
 .video-picker {
   border: 2px solid white;
   border-radius: 30px !important;
@@ -493,7 +499,6 @@ header h1 {
     }
   }
 }
-
 
 .new-tag {
   width: 100% !important;
