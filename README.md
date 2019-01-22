@@ -4,7 +4,9 @@ lunarium (noun): a device for illustrating the motion and phases of the moon.
 
 > Vue SPA concept for collaborative MV analysis on Youtube, demo site designed for the K-pop group LOOΠΔ. This group was selected due to its relatively large library of music videos.
 
-![Demo GIF](https://thumbs.gfycat.com/LastMajorIcefish-size_restricted.gif)
+![Demo GIF](http://thumbs.gfycat.com/OffbeatEverlastingHen-size_restricted.gif)
+
+Thanks to @tinchor for the design revamp.
 
 ## Build Setup
 
