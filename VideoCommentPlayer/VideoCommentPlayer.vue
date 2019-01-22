@@ -112,7 +112,11 @@ export default {
       this.$emit('commentPost', { time, text, clearTextAreaFn })
     },
     handleWindowResize () {
-      if (window.innerWidth < 992) this.playerHeight = 300
+      if (window.innerWidth < 992) {
+        this.playerHeight = 300
+        return
+      }
+      if (window.innerHeight <= 900) this.playerHeight = 600
       else this.playerHeight = 800
     },
     jumpTo (timeInSeconds) {
