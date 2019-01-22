@@ -12,10 +12,10 @@
       </ul>
     </header>
     <section name="subheader" class="subheader-section">
-      <p class="subheader italics">
+      <p class="subheader">
       lu·nar·i·um: a device for illustrating the motion and phases of the moon <sup><a class="black" href="https://www.merriam-webster.com/dictionary/lunarium">[1]</a></sup>
       </p>
-      <h3>Time-annotated videos for Orbits to collaborate</h3>
+      <h3>Time-annotated videos for Orbit collaboration</h3>
     </section>
     <section class="center-block">
       <span>Select a Video</span>
