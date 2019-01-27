@@ -56,6 +56,7 @@
         :jumpToTime="jumpToTime"
         :opacity="getOpacity(i)"
         :highlighted="c.id === currentCmt.id"
+        :color="commentColors[i]"
         @commentDelete="commentDelete"
         @commentEdit="commentEdit"
         @commentFetchNext="commentFetchNext"
@@ -68,6 +69,7 @@
 <script>
 import CommentComposer from './CommentComposer.vue'
 import Comment from './Comment.vue'
+import {interpolateColors, rgbArrayToString} from '../src/utils/colors'
 
 export default {
   name: 'comments',
@@ -124,6 +126,9 @@ export default {
     },
     passedCommentCount () {
       return this.passedComments.length
+    },
+    commentColors () {
+      return interpolateColors('rgb(45, 200, 150)', 'rgb(255, 181, 97)', this.comments.length)
     }
   },
   methods: {
@@ -149,15 +154,19 @@ export default {
       if (!this.currentCmt.index || this.currentCmt.index === index) return 1
       const diff = Math.abs(this.currentCmt.index - index)
       switch (diff) {
-        case 1: return .7
-        case 2: return .4
-        default: return .2
+        case 1:
+        case 2:
+          return .8
+        case 3:
+        case 4:
+          return .5
+        default: return .4
       }
     },
     getScrollValue () {
       const {offsetHeight, offsetTop} = this.$children[this.currentCmt.index + 1].$el
       const scrollValue = this.height > 300
-        ? -(this.height / 2 - offsetHeight / 2) + offsetTop
+        ? -(this.height / 2 - offsetHeight / 2) + offsetTop + 50
         : offsetTop
       return Math.max(0, scrollValue);
     },
@@ -218,6 +227,7 @@ export default {
   margin: 15px 0 15px 25px;
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   
   ul {
     padding: 0;
@@ -257,5 +267,14 @@ export default {
 
 .empty-space {
   height: 900px;
+}
+
+@media (max-width: 992px) {
+  .comments-titlebar {
+    margin: 7px 20px;
+  }
+  .comment-list {
+    margin-top: 10px;
+  }
 }
 </style>

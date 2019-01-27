@@ -1,14 +1,14 @@
 <template>
-  <div id="app">
+  <div id="app" :style="{backgroundPosition: `0 ${starsPosition}px`}">
     <notifications group="base" position="top left" />
     <login-modal />
     <register-modal />
     <header class="logo-text">
       <h1>{{header}}</h1>
       <ul class="top-bar">
-        <li><button @click="showRegister" v-if="!isAuthed">Register</button></li>
-        <li><button @click="showLogin" v-if="!isAuthed">Log In</button></li>
-        <li><p class="logout-username">{{username}}</p><button @click="logout" v-if="isAuthed">Log out</button></li>
+        <li v-if="!isAuthed"><button @click="showRegister">Register</button></li>
+        <li v-if="!isAuthed"><button @click="showLogin">Log In</button></li>
+        <li v-if="isAuthed"><button @click="logout">Log out <p class="logout-username">{{username}}</p></button></li>
       </ul>
     </header>
     <section name="subheader" class="subheader-section">
@@ -93,7 +93,8 @@ export default {
       endTagOn,
       header: 'LOOΠΔrium',
       noop,
-      usernameRegex
+      usernameRegex,
+      starsPosition: 0,
     }
   },
   computed: {
@@ -165,6 +166,11 @@ export default {
       });
     }
   },
+  mounted () {
+    window.addEventListener('scroll', () => {
+      this.starsPosition = -(window.scrollY / 3)
+    })
+  },
   created () {
     const { authors, v } = getQueryParams()
     if (authors) {
@@ -181,7 +187,7 @@ export default {
 @import "./assets/normalize.css";
 @import "./assets/bootstrap.css";
 body {
-  background: linear-gradient(#0B1626, #000810);
+  background: linear-gradient(#1b2331, #211a26);
 }
 
 #app {
@@ -190,6 +196,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: white;
+  background: url('https://i.imgur.com/DT18JOd.png') repeat-x;
 }
 
 .vue-dialog {
@@ -199,6 +206,12 @@ body {
 
 footer {
   margin: 10px;
+  a {
+    color: #ffb561;
+    &:hover {
+      color: #ff8722;
+    }
+  }
 }
 
 h1 {
@@ -234,6 +247,10 @@ ul {
 
 a {
   color: #2DC896;
+
+  &:hover {
+    color: #268178;
+  }
 }
 
 .bold-title {
@@ -271,8 +288,8 @@ a {
     display: none;
 
     &:checked + label::before {
-      background: #ff8d39;
-      border-color: #ff8d39;
+      background: #197157;
+      border-color: #42c592;
     }
   }
 
@@ -344,34 +361,30 @@ header h1 {
 
 .top-bar {
   display: flex;
-  flex-direction: column;
   justify-content: center;
   position: absolute;
+  align-items: center;
   top: 0;
   right: 0;
   height: 100%;
-  padding: 0 20px 0;
+  padding: 10px 40px 0;
   margin: 0;
   user-select: none;
   text-align: right;
+
+  li {
+    margin: 3px;
+  }
 
   button {
     background: transparent;
     padding: 3px 0;
     color: black;
+    border: 1px solid #ddd;
+    padding: 5px 12px;
 
-    &::after {
-      content: "";
-      display: inline-block;
-      width: 9px;
-      height: 9px;
-      border-radius: 50%;
-      background: #2DC896;
-      margin-left: 8px;
-    }
-
-    &:hover::after {
-      background: #ff8d39;
+    &:hover {
+      border-color: #358f8f;
     }
   }
 }
@@ -392,9 +405,9 @@ header h1 {
 }
 
 .logout-username {
-  margin-right: 14px;
-  margin-bottom: 0;
+  margin: 0;
   color: #25B398;
+  display: inline-block;
 }
 
 .video-picker {
@@ -403,7 +416,7 @@ header h1 {
   display: block;
   min-width: 300px;
   max-width: 700px;
-  width: 73%;
+  width: 97%;
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 10px;
@@ -431,7 +444,7 @@ header h1 {
 }
 
 .video-picker .dropdown-menu {
-  background: #0B1626;
+  background: #1d202e;
 
   li {
     margin: 0;
@@ -473,7 +486,7 @@ header h1 {
 .vue-input-tag-wrapper {
   -webkit-appearance: textfield;
   background: transparent !important;
-  border: 1px solid rgba(79, 99, 134, 0.5) !important;
+  border: 1px solid #4c3e51 !important;
   border-radius: 20px !important;
   cursor: text;
   display: inline-block !important;
@@ -512,5 +525,38 @@ header h1 {
   border: none !important;
   padding: 4px;
   padding-left: 10px !important;
+}
+
+@media (max-width: 992px) {
+  .container {
+    padding: 0;
+  }
+  .row {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  .subheader-section {
+    padding: 60px 15px 40px;
+  }
+  #app > .center-block {
+    padding: 30px 15px 20px;
+  }
+  .vue-input-tag-wrapper {
+    margin-top: 28px !important;
+    width: 88%;
+  }
+  header {
+    padding-bottom: 0;
+
+    .top-bar {
+      position: relative;
+      flex-direction: row;
+      margin-top: 20px;
+
+      li {
+        margin: 0 5px;
+      }
+    }
+  }
 }
 </style>
