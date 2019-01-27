@@ -201,4 +201,10 @@ export default {
 .row {
   padding: 30px 40px;
 }
+@media (max-width: 992px) {
+  .video-comment-player-video {
+    border: 0;
+    border-radius: 0;
+  }
+}
 </style>
