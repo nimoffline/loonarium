@@ -4,7 +4,7 @@
     v-if="!!comment"
     :style="{opacity}"
   >
-    <span class="author">{{commentAuthor}} </span><a href="#video-comment-player-video" class="timestamp" @click="jumpToComment">{{commentTime}}</a>
+    <span class="author">{{commentAuthor}} </span><a href="#video-comment-player-video" class="timestamp" @click="jumpToComment" :style="{color}">{{commentTime}}</a>
     <span class="no-select">&nbsp;</span>
     <span class="edit-start gray" v-if="canEdit && !isEditing" @click="startEditing">Edit</span>
     <span class="edit-start gray" v-if="isEditing" @click="cancelEditing">Cancel</span>
@@ -39,7 +39,8 @@ export default {
     editingCommentIdAdd: Function,
     editingCommentIdRemove: Function,
     highlighted: Boolean,
-    opacity: Number
+    opacity: Number,
+    color: String
   },
   data () {
     return {
@@ -215,7 +216,7 @@ export default {
     color: black;
 
     .timestamp {
-      color: black;
+      color: black !important;
     }
   }
 }
@@ -249,5 +250,11 @@ span {
 
 .partial-opacity {
   opacity: .6;
+}
+
+@media (max-width: 992px) {
+  .single-comment {
+    padding: 12px 18px;
+  }
 }
 </style>
