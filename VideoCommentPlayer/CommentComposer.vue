@@ -58,14 +58,11 @@ export default {
 .comment-composer {
   color: black;
   position: relative;
-  background: #050F1B;
-  right: 25px;
-  left: 25px;
-  z-index: 2;
+  margin-left: 25px;
 }
 
 .composer-textarea {
-  width: calc(100% - 25px);
+  width: 100%;
   padding: 12px 15px;
   background: transparent;
   border: 1px solid white;
@@ -78,8 +75,14 @@ export default {
   font-size: 14px;
   position: absolute;
   bottom: 10px;
-  right: 33px;
+  right: 8px;
   border-radius: 20px;
   padding: 6px 10px 5px;
+}
+
+@media (max-width: 992px) {
+  .comment-composer {
+    margin: 10px 15px 0;
+  }
 }
 </style>
