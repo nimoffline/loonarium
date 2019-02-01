@@ -164,13 +164,16 @@ export default {
       }
     },
     getScrollValue () {
-      const {offsetHeight, offsetTop} = this.$children[this.currentCmt.index + 1].$el
+      const nextChild = this.$children[this.currentCmt.index + 1]
+      if (!nextChild) return -Infinity
+      const { offsetHeight, offsetTop } = nextChild.$el
       const scrollValue = this.height > 300
         ? -(this.height / 2 - offsetHeight / 2) + offsetTop + 50
         : offsetTop
       return Math.max(0, scrollValue);
     },
     scrollTo (value) {
+      if (value === -Infinity) return
       let current = this.$refs.list.scrollTop
       const backwards = current > value;
       const distance = Math.abs(current - value);
