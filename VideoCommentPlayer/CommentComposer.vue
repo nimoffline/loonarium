@@ -41,7 +41,6 @@ export default {
   methods: {
     clearTextAreaFn () {
       this.commentText = '' 
-      console.log('???')
     },
     submitComment () {
       this.$emit('post', {

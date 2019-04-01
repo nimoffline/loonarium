@@ -12,7 +12,7 @@
     <span class="edit-start gray" v-if="isEditing" @click="deleteComment">Delete</span>
     <p v-if="!isEditing" v-html="commentText"></p><!--
     --><div v-if="isEditing">
-      <input name="editor-time" class="editor-time" type="number" step="0.05" v-model="newCommentTime" min="0">
+      <input name="editor-time" class="editor-time" type="number" step="0.02" v-model="newCommentTime" min="0">
       <label for="editor-time">Time (sec.)</label>
       <textarea class="editor-text" rows="4" v-model="newCommentText"/>
       <br/>
