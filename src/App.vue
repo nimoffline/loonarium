@@ -65,7 +65,7 @@
       Personal
       <a href="https://twitter.com/orrery_nim/">Twitter</a>
       &nbsp;|&nbsp;
-      <a href="https://github.com/choiryan/loonarium/">Github</a>
+      <a href="https://github.com/nimoffline/loonarium/">Github</a>
       <strong>&nbsp;|&nbsp;</strong>
       Official 
       <a href="https://www.google.com/search?q=loonatheworld.com">loonatheworld</a>
