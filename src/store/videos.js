@@ -51,7 +51,7 @@ const mutations = {
 }
 
 const actions = {
-  async fetchVideoOptions ({ commit, dispatch }, { page=1, preselect }) {
+  async fetchVideoOptions ({ state, commit, dispatch }, { page=1, preselect }) {
     const videos = await fetchVideos(page)
     commit('SET_VIDEO_OPTIONS', videos.results)
     videos.results.forEach(video => {
@@ -59,6 +59,9 @@ const actions = {
     })
     if (!isNaN(preselect)) {
       commit('SET_CURRENT_VIDEO_BY_ID', preselect)
+      console.log(preselect, state.currentVideo)
+      dispatch('comments/fetchFirstPage', { code: state.currentVideo.code },
+        { root: true })
     } else if (page === 1) {
       commit('SET_CURRENT_VIDEO', videos.results[videos.results.length-1])
       const video = videos.results[videos.results.length-1]
