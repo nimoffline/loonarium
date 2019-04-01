@@ -3,7 +3,7 @@
   "description": "Crowdsourcing analysis of Youtube MVs with time-annotated videos",
   "version": "1.0.0",
   "author": "",
-  "homepage": "git@github.com:choiryan/loonarium",
+  "homepage": "git@github.com:nimoffline/loonarium",
   "license": "MIT",
   "private": true,
   "cname": "www.loonarium.com",
