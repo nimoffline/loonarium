@@ -64,7 +64,7 @@ export default {
       let seconds = totalSeconds % 60
       if (minutes < 10) minutes = '0' + minutes
       if (seconds < 10) seconds = '0' + seconds
-      let centis = (this.comment.time % 1).toFixed(2) * 100
+      let centis = Math.round((this.comment.time % 1).toFixed(2) * 100)
       let centiStr = '' + centis
       if (centiStr.length === 1) centiStr += '0'
       return `${minutes}:${seconds}.${centiStr}`
