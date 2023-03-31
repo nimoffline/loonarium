@@ -70,7 +70,7 @@
       Official 
       <a href="https://www.google.com/search?q=loonatheworld.com">loonatheworld</a>
       &nbsp;|&nbsp;
-      <a href="https://www.google.com/search?q=dlrowehtanool.com">dlrowehtanool</a>
+      <a href="https://artms-strategy.com/">artms</a>
     </footer>
   </div>
 </template>
